@@ -1,0 +1,25 @@
+{
+  "name": "graphql_api",
+  "version": "1.0.0",
+  "description": "A graphQL api",
+  "homepage": "https://github.com/noomde/GraphQL_API#readme",
+  "bugs": {
+    "url": "https://github.com/noomde/GraphQL_API/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noomde/GraphQL_API.git"
+  },
+  "license": "ISC",
+  "author": "Anthon Bäckström",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0"
+  }
+}
