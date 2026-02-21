@@ -1,7 +1,7 @@
 COPY games_raw(
     id,
     title,
-    releasedate,
+    release_date,
     rating,
     genres,
     description,
@@ -17,3 +17,4 @@ COPY games_raw(
     publisher
 )
 FROM STDIN WITH (FORMAT csv, HEADER true);
+
