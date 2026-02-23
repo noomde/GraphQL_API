@@ -8,6 +8,9 @@ const { Pool } = pkg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+/**
+ * Configuration for railway database.
+ */
 export const database = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {
@@ -15,6 +18,9 @@ export const database = new Pool({
     }
 });
 
+/**
+ * Paths to SQL files and CSV file.
+ */
 export const paths = {
     sql: path.join(__dirname, 'sql'),
     csv: path.join(__dirname, '../data/metacritic_games.csv'),
