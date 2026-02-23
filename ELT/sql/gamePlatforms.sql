@@ -6,7 +6,7 @@ INSERT INTO game_platforms (
 SELECT
     games.id,
     platforms.id,
-    NULLIF(TRIM(platform_metascore_value), '')::int
+    MAX(NULLIF(TRIM(platform_metascore_value), '')::int)
     
 FROM games_raw
 JOIN games ON games.metacritic_id = games_raw.id
@@ -18,6 +18,8 @@ CROSS JOIN LATERAL unnest(string_to_array(games_raw.platform_metascores, ',')) W
 JOIN platforms ON platforms.name = TRIM(platform_name_value)
 
 WHERE platform_name.position = platform_metascore.position
+
+GROUP BY games.id, platforms.id
 
 ON CONFLICT (game_id, platform_id)
 DO UPDATE SET platform_metascore = EXCLUDED.platform_metascore;

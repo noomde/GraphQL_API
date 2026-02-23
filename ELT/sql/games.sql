@@ -12,7 +12,7 @@ INSERT INTO games (
 SELECT
     games_raw.id::bigint,
     TRIM(games_raw.title),
-    NULLIF(TRIM(games_raw.release_date), ''),
+    NULLIF(TRIM(games_raw.release_date), '')::date,
     NULLIF(TRIM(games_raw.rating), ''),
     NULLIF(TRIM(games_raw.genres), ''),
     NULLIF(TRIM(games_raw.description), ''),
