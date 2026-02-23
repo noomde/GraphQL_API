@@ -1,5 +1,3 @@
-import { from as copyFrom } from "pg-copy-streams";
-
 /**
  * Class responsible for running SQL transformations on the database using provided SQL files and a SQL loader.
  */
@@ -52,32 +50,6 @@ export class SqlTransformRunner {
    * @param {string[]} fileNames An array of SQL file names to be executed in sequence.
    */
   async runFromFiles(fileNames) {
-    await this.transaction(() => {
-      this.runSqlFiles(fileNames);
-    });
-  }
-
-  /**
-   * Executes a SQL COPY command to copy data from a CSV stream into the database using the specified SQL file.
-   *
-   * @param {string} fileName The name of the SQL file containing the COPY command.
-   * @param {ReadableStream} csvStream A readable stream of the CSV data to be copied into the database.
-   */
-  async copyToDatabase(fileName, csvStream) {
-    console.log(`Copying data from CSV using file: ${fileName}`);
-    const sql = this.sqlLoader.read(fileName);
-
-    const client = await this.database.connect();
-    try {
-      await new Promise((resolve, reject) => {
-        const dbStream = client.query(copyFrom(sql));
-        csvStream
-          .pipe(dbStream)
-          .on("finish", resolve)
-          .on("error", reject);
-      });
-    } finally {
-      client.release();
-    }
+      return this.transaction(() => this.runSqlFiles(fileNames));
   }
 }

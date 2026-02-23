@@ -3,22 +3,27 @@ import { SqlLoader } from './sqlLoader.js';
 import { extractDataFromCSV } from './extractor.js';
 import { database, paths } from './config.js';
 
-const loader = new SqlLoader(paths.sql);
-const pipeline = new SqlTransformRunner(database, loader);
+const client = await database.connect();
 
-const csvStream = await extractDataFromCSV(paths.csv);
+try {
+  const loader = new SqlLoader(paths.sql);
+  const pipeline = new SqlTransformRunner(client, loader);
 
-await pipeline.runFromFiles(['truncate.sql']);
+  const csvStream = await extractDataFromCSV(paths.csv);
 
-await pipeline.copyToDatabase('gamesRaw.sql', csvStream);
+  await pipeline.transaction(async () => {
+    await pipeline.runSqlFiles(['truncate.sql']);
+    await loader.copyToDatabase('gamesRaw.sql', csvStream, client);
+    await pipeline.runSqlFiles([
+      'platforms.sql',
+      'games.sql',
+      'scores.sql',
+      'gamePlatforms.sql',
+    ]);
+  });
 
-await pipeline.runFromFiles([
-    'platforms.sql',
-    'games.sql',
-    'scores.sql',
-    'gamePlatforms.sql'
-]);
-
-console.log('Pipeline execution completed successfully.');
-
-await database.end();
+  console.log('Pipeline execution completed successfully.');
+} finally {
+  client.release();
+  await database.end();
+}

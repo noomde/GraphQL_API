@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { from as copyFrom } from "pg-copy-streams";
 
 export class SqlLoader {
   constructor(sqlPath) {
@@ -24,5 +25,24 @@ export class SqlLoader {
    */
   read(fileName) {
     return fs.readFileSync(this.resolve(fileName), "utf8");
+  }
+
+  /**
+   * Executes a SQL COPY command to copy data from a CSV stream into the database using the specified SQL file.
+   *
+   * @param {string} fileName The name of the SQL file containing the COPY command.
+   * @param {ReadableStream} csvStream A readable stream of the CSV data to be copied into the database.
+   */
+  async copyToDatabase(fileName, csvStream, database) {
+    console.log(`Copying data from CSV using file: ${fileName}`);
+    const sql = this.read(fileName);
+
+    await new Promise((resolve, reject) => {
+      const dbStream = database.query(copyFrom(sql));
+      csvStream
+        .pipe(dbStream)
+        .on("finish", resolve)
+        .on("error", reject);
+    });
   }
 }
