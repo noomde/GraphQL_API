@@ -1,0 +1,27 @@
+import { pool } from '../config/database.js';
+
+/**
+ * Retrieves all platforms from the database.
+ *
+ * @returns {Promise<Array>} An array of platform objects.
+ */
+export const findAllPlatforms = async () => {
+    const { rows } = await pool.query(
+        `SELECT * FROM platforms ORDER BY id ASC`
+    )
+    return rows
+}
+
+/**
+ * Finds a platform by its ID.
+ *
+ * @param {number} id - The ID of the platform to find.
+ * @returns {Promise<Object>} The platform object or null if not found.
+ */
+export const findPlatformById = async (id) => {
+    const { rows } = await pool.query(
+        `SELECT * FROM platforms WHERE id = $1`,
+        [id]
+    )
+    return rows[0] || null
+}
