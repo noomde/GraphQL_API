@@ -1,4 +1,4 @@
-import { pool } from "../config/database.js";
+import { pool } from '../config/database.js';
 
 /**
  * Inserts a new game into the database.
