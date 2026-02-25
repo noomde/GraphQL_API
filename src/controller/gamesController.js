@@ -36,7 +36,7 @@ export class GamesController {
    */
   static async createGame(gameData) {
     if (!gameData.title) {
-      throw new ApolloError("Game title is required");
+      throw new ApolloError('Game title is required');
     }
 
     return await GamesRepository.createGame(gameData);
