@@ -12,7 +12,7 @@ export class GamePlatformsRepository {
       `SELECT 
             platforms.id, 
             platforms.name,
-            game_platforms.platform_metascore
+            game_platforms.platform_metascore AS platformMetascore
          FROM game_platforms
          JOIN platforms ON platforms.id = game_platforms.platform_id
          WHERE game_platforms.game_id = $1`,

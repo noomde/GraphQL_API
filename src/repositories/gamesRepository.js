@@ -29,7 +29,17 @@ export class GamesRepository {
             publisher
         ) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        RETURNING *`,
+      RETURNING
+        id,
+        metacritic_id AS "metacriticId",
+        title,
+        release_date AS "releaseDate",
+        rating,
+        genres,
+        description,
+        developer,
+        publisher
+      `,
       [
         metacritic_id,
         title,
@@ -45,31 +55,69 @@ export class GamesRepository {
   }
 
   static async findGameById(id) {
-    const { rows } = await pool.query(`SELECT * FROM games WHERE id = $1`, [
-      id,
-    ]);
+    const { rows } = await pool.query(
+      `
+      SELECT
+        id,
+        metacritic_id AS "metacriticId",
+        title,
+        release_date AS "releaseDate",
+        rating,
+        genres,
+        description,
+        developer,
+        publisher
+      FROM games
+      WHERE id = $1
+      `,
+      [id],
+    );
     return rows[0] || null;
   }
 
   static async findAllGames() {
-    const { rows } = await pool.query(`SELECT * FROM games ORDER BY id ASC`);
+    const { rows } = await pool.query(
+      `
+      SELECT
+        id,
+        metacritic_id AS "metacriticId",
+        title,
+        release_date AS "releaseDate",
+        rating,
+        genres,
+        description,
+        developer,
+        publisher
+      FROM games
+      ORDER BY id ASC
+      `,
+    );
     return rows;
   }
 
   static async updateGame(id, gameData) {
     const { rows } = await pool.query(
       `UPDATE games SET
-            metacritic_id = COALESCE($2, metacritic_id),
-            title = COALESCE($3, title),
-            release_date = COALESCE($4, release_date),
-            rating = COALESCE($5, rating),
-            genres = COALESCE($6, genres),
-            description = COALESCE($7, description),
-            developer = COALESCE($8, developer),
-            publisher = COALESCE($9, publisher)
-        WHERE id = $1
-        RETURNING *
-        `,
+        metacritic_id = COALESCE($2, metacritic_id),
+        title = COALESCE($3, title),
+        release_date = COALESCE($4, release_date),
+        rating = COALESCE($5, rating),
+        genres = COALESCE($6, genres),
+        description = COALESCE($7, description),
+        developer = COALESCE($8, developer),
+        publisher = COALESCE($9, publisher)
+      WHERE id = $1
+      RETURNING
+        id,
+        metacritic_id AS "metacriticId",
+        title,
+        release_date AS "releaseDate",
+        rating,
+        genres,
+        description,
+        developer,
+        publisher
+      `,
       [
         id,
         gameData.metacritic_id,

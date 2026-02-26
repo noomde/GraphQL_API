@@ -4,7 +4,7 @@ type Game {
   title: String!
   releaseDate: String
   rating: String
-  genres: [String!]!
+  genres: String!
   description: String
   developer: String
   publisher: String
@@ -20,7 +20,7 @@ type Platform {
 
 type GamePlatform {
   platform: Platform!
-  metascore: Int
+  platformMetascore: Int
 }
 
 type Score {
@@ -47,7 +47,7 @@ extend type Mutation {
     title: String!
     releaseDate: String
     rating: String
-    genres: [String!]!
+    genres: String!
     description: String
     developer: String
     publisher: String
@@ -59,7 +59,7 @@ extend type Mutation {
     title: String
     releaseDate: String
     rating: String
-    genres: [String!]
+    genres: String!
     description: String
     developer: String
     publisher: String
