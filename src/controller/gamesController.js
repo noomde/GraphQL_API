@@ -1,5 +1,5 @@
-import { GamesRepository } from "../repositories/gamesRepository";
-import { ApolloError } from "apollo-server-errors";
+import { GamesRepository } from '../repositories/gamesRepository.js';
+import { ApolloError } from 'apollo-server-errors';
 
 export class GamesController {
   /**

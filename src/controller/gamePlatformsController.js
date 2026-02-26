@@ -1,5 +1,5 @@
-import { findGamePlatformsByGameId } from "../repositories/gamePlatformsRepository.js";
-import { ApolloError } from "apollo-server-errors";
+import { findGamePlatformsByGameId } from '../repositories/gamePlatformsRepository.js';
+import { ApolloError } from 'apollo-server-errors';
 
 export class GamePlatformsController {
   /**

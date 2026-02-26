@@ -1,5 +1,5 @@
-import { ScoresController } from "../repositories/scoresRepository.js";
-import { ApolloError } from "apollo-server-errors";
+import { ScoresController } from '../repositories/scoresRepository.js';
+import { ApolloError } from 'apollo-server-errors';
 
 export class ScoresController {
   /**
