@@ -1,0 +1,13 @@
+type Score {
+  metascore: Int
+  metascoreCount: Int
+  metascoreSentiment: String
+  userScore: Float
+  userScoreCount: Int
+  userScoreSentiment: String
+}
+
+extend type Query {
+  scores: [Score!]!
+  score(gameId: Int!): Score
+}

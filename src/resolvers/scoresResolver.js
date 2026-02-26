@@ -15,11 +15,11 @@ export default {
      * Retrieves a score object.
      *
      * @param {*} _ - The parent object.
-     * @param {*} id - The gameID of the score.
+     * @param {*} gameId - The gameID of the score.
      * @returns {Promise<Object>} The score object.
      */
-    score: async (_, { id }) => {
-      return await ScoresController.getScoreById(id);
+    score: async (_, { gameId }) => {
+      return await ScoresController.getScoreById(gameId);
     },
   },
 };
