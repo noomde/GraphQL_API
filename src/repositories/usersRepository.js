@@ -9,9 +9,11 @@ export class UsersRepository {
    */
   static async findUserByUsername(username) {
     const { rows } = await getPool().query(
-      `SELECT id, username, password_hash
-         FROM users
-         WHERE username = $1`,
+      `SELECT id,
+          username,
+          password_hash AS "passwordHash"
+        FROM users
+        WHERE username = $1`,
       [username],
     );
     return rows[0] || null;
@@ -28,7 +30,7 @@ export class UsersRepository {
     const { rows } = await getPool().query(
       `INSERT INTO users (username, password_hash)
          VALUES ($1, $2)
-         RETURNING id, username`,
+         RETURNING id, username, password_hash AS "passwordHash"`,
       [username, passwordHash],
     );
     return rows[0];
