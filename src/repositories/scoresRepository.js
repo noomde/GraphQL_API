@@ -1,4 +1,4 @@
-import { pool } from '../config/database.js';
+import { getPool } from '../config/database.js';
 
 export class ScoresRepository {
   /**
@@ -7,7 +7,7 @@ export class ScoresRepository {
    * @returns {Promise<Array>} An array of score objects.
    */
   static async findAllScores() {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `
       SELECT
         metascore,
@@ -30,7 +30,7 @@ export class ScoresRepository {
    * @returns {Promise<Object>} The score object or null if not found.
    */
   static async findScoreById(gameId) {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `
       SELECT
         metascore,

@@ -1,4 +1,4 @@
-import { pool } from '../config/database.js';
+import { getPool } from '../config/database.js';
 
 export class PlatformsRepository {
   /**
@@ -7,7 +7,7 @@ export class PlatformsRepository {
    * @returns {Promise<Array>} An array of platform objects.
    */
   static async findAllPlatforms() {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `SELECT * FROM platforms ORDER BY id ASC`,
     );
     return rows;
@@ -20,7 +20,7 @@ export class PlatformsRepository {
    * @returns {Promise<Object>} The platform object or null if not found.
    */
   static async findPlatformById(id) {
-    const { rows } = await pool.query(`SELECT * FROM platforms WHERE id = $1`, [
+    const { rows } = await getPool().query(`SELECT * FROM platforms WHERE id = $1`, [
       id,
     ]);
     return rows[0] || null;

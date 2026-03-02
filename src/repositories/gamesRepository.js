@@ -1,4 +1,4 @@
-import { pool } from '../config/database.js';
+import { getPool } from '../config/database.js';
 
 export class GamesRepository {
   /**
@@ -17,7 +17,7 @@ export class GamesRepository {
     developer,
     publisher,
   }) {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `INSERT INTO games (
             metacritic_id,
             title,
@@ -55,7 +55,7 @@ export class GamesRepository {
   }
 
   static async findGameById(id) {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `
       SELECT
         id,
@@ -76,7 +76,7 @@ export class GamesRepository {
   }
 
   static async findAllGames() {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `
       SELECT
         id,
@@ -96,7 +96,7 @@ export class GamesRepository {
   }
 
   static async updateGame(id, gameData) {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `UPDATE games SET
         metacritic_id = COALESCE($2, metacritic_id),
         title = COALESCE($3, title),
@@ -134,7 +134,7 @@ export class GamesRepository {
   }
 
   static async deleteGame(id) {
-    const { rowCount } = await pool.query(`DELETE FROM games WHERE id = $1`, [
+    const { rowCount } = await getPool().query(`DELETE FROM games WHERE id = $1`, [
       id,
     ]);
     return rowCount > 0;

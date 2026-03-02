@@ -1,4 +1,4 @@
-import { pool } from '../config/database.js';
+import { getPool } from '../config/database.js';
 
 export class UsersRepository {
   /**
@@ -8,7 +8,7 @@ export class UsersRepository {
    * @returns {Promise<object|null>} The user object if found, otherwise null.
    */
   static async findUserByUsername(username) {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `SELECT id, username, password_hash
          FROM users
          WHERE username = $1`,
@@ -25,7 +25,7 @@ export class UsersRepository {
    * @returns {Promise<object>} The inserted user object.
    */
   static async insert(username, passwordHash) {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `INSERT INTO users (username, password_hash)
          VALUES ($1, $2)
          RETURNING id, username`,

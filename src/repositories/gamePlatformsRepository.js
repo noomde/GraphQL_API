@@ -1,4 +1,4 @@
-import { pool } from '../config/database.js';
+import { getPool } from '../config/database.js';
 
 export class GamePlatformsRepository {
   /**
@@ -8,7 +8,7 @@ export class GamePlatformsRepository {
    * @returns {Promise<Array>} An array of platform objects associated with the game.
    */
   static async findGamePlatformsByGameId(gameId) {
-    const { rows } = await pool.query(
+    const { rows } = await getPool().query(
       `SELECT 
             platforms.id, 
             platforms.name,
