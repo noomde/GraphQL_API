@@ -1,9 +1,9 @@
 type User {
-    id: Id!
+    id: ID!
     username: String!
 }
 
 extend type Mutation {
     registerUser(username: String!, password: String!): User!
-    loginUser(username: String!, password: String!):
+    loginUser(username: String!, password: String!): User!
 }
