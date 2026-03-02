@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
-import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core'
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
 import express from 'express';
 import cors from 'cors';
@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import { typeDefs } from './schema/graphQL/index.js';
 import resolvers from './resolvers/index.js';
 import { connectToDatabase } from './config/database.js';
+import { authenticateJWT } from './middleware/auth.js';
 dotenv.config();
 
 try {
@@ -28,10 +29,20 @@ try {
   app.use(cors());
   app.use(express.json());
 
+  app.set('trust proxy', 1);
+
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
+    context: async ({ req }) => {
+      try {
+        const user = await authenticateJWT(req);
+        return { user };
+      } catch (error) {
+        return { user: null };
+      }
+    },
   });
 
   await apolloServer.start();

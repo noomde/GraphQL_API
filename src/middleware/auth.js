@@ -12,7 +12,7 @@ import http from 'node:http'
  * @param {object} res - Express response object.
  * @param {Function} next - Express next middleware function.
  */
-export const authenticateJWT = async (req, res, next) => {
+export async function authenticateJWT(req) {
   try {
     const [authenticationScheme, token] = req.headers.authorization?.split(' ')
 
@@ -20,9 +20,7 @@ export const authenticateJWT = async (req, res, next) => {
       throw new Error('Invalid authentication scheme.')
     }
 
-    req.user = await JsonWebToken.decodeUser(token)
-
-    next()
+    return await JsonWebToken.decodeUser(token)
   } catch (error) {
     const statusCode = 401
     const err = new Error(http.STATUS_CODES[statusCode])
@@ -32,30 +30,3 @@ export const authenticateJWT = async (req, res, next) => {
     next(err)
   }
 }
-
-
-
-/**
- * Authorizes a request based on the user associated with the resource.
- *
- * @param {*} req - Express request object.
- * @param {*} res - Express response object.
- * @param {*} next - Express next middleware function.
- * @returns {Promise<void>}
- */
-export const authorizeJWT = async (req, res, next) => {
-  if (!req.doc) {
-    return res
-      .status(404)
-      .json({ error: 'Resource not found.' })
-  }
-
-  if (req.doc.createdBy === req.user.id.toString()) {
-    next()
-  } else {
-    const error = new Error('Forbidden: You are not the owner of this resource.')
-    error.status = 403
-    next(error)
-  }
-}
-
