@@ -18,10 +18,10 @@ export class ScoresController {
    * @returns {Promise<Object>} The score.
    * @throws {ApolloError} If the score with the specified ID is not found.
    */
-  static async getScoreById(id) {
-    const score = await ScoresRepository.getScoreById(id);
+  static async getScoreByGameId(id) {
+    const score = await ScoresRepository.findScoreByGameId(id);
     if (!score) {
-      throw new ApolloError(`Score with ID ${id} not found`);
+      throw new ApolloError(`Score with Game ID ${id} not found`);
     }
 
     return score;

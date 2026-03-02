@@ -4,7 +4,7 @@ const { Pool } = pg;
 let pool = null;
 
 export const connectToDatabase = async (connectionString) => {
-  const pool = new Pool({
+  pool = new Pool({
     connectionString,
     ssl: {
       rejectUnauthorized: false,

@@ -33,8 +33,8 @@ export default {
      * @param {*} gameData - The data for the game to be created.
      * @returns {Promise<Object>} The created game object.
      */
-    createGame: async (_, { gameData }) => {
-      return await GamesController.createGame(gameData);
+    createGame: async (_, args) => {
+      return await GamesController.createGame(args);
     },
 
     /**
@@ -69,7 +69,7 @@ export default {
      * @returns {Promise<Array>} An array of scores associated with the game.
      */
     scores: async (parent) => {
-      return await ScoresController.getScoresByGameId(parent.id);
+      return await ScoresController.getScoreByGameId(parent.id);
     },
 
     /**

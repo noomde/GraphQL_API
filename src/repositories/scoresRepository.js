@@ -29,7 +29,7 @@ export class ScoresRepository {
    * @param {number} gameId - The ID of the game to find the score for.
    * @returns {Promise<Object>} The score object or null if not found.
    */
-  static async findScoreById(gameId) {
+  static async findScoreByGameId(gameId) {
     const { rows } = await getPool().query(
       `
       SELECT

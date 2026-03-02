@@ -8,7 +8,7 @@ export class GamesController {
    * @returns {Promise<Array>} An array of games.
    */
   static async getAllGames() {
-    return await GamesRepository.getAllGames();
+    return await GamesRepository.findAllGames();
   }
 
   /**

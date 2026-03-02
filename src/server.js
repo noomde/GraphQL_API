@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core'
 
 import express from 'express';
 import cors from 'cors';
@@ -31,7 +31,7 @@ try {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+    plugins: [ApolloServerPluginLandingPageLocalDefault()],
   });
 
   await apolloServer.start();
