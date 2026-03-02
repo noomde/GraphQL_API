@@ -18,12 +18,12 @@ try {
   const app = express();
   const port = process.env.PORT || 3001;
 
-  // app.use(
-  //   helmet({
-  //     crossOriginOpenerPolicy: { policy: 'same-origin' },
-  //     crossOriginResourcePolicy: { policy: 'cross-origin' },
-  //   }),
-  // );
+  app.use(
+    helmet({
+      crossOriginOpenerPolicy: { policy: 'same-origin' },
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
 
   app.use(cors());
   app.use(express.json());

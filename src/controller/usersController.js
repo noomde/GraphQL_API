@@ -1,6 +1,7 @@
 import { UsersRepository } from '../repositories/usersRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 import bcrypt from 'bcrypt';
+import { JsonWebToken } from '../lib/jsonWebToken.js';
 
 export class UsersController {
   /**
@@ -34,7 +35,9 @@ export class UsersController {
       throw new ApolloError('Invalid credentials');
     }
 
-    return user;
+    const token = await JsonWebToken.encodeUser(user, '1h');
+
+    return { token };
   }
 
   static async hashAndSaltPassword(password) {

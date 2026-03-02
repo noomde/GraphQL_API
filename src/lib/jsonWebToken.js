@@ -20,7 +20,7 @@ export class JsonWebToken {
       jwt.sign(
         {
           iat: Math.floor(Date.now() / 1000),
-          sub: user._id,
+          sub: user.id,
           username: user.username,
         },
         privateKey,
