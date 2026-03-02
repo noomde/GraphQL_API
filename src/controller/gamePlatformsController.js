@@ -1,4 +1,4 @@
-import { findGamePlatformsByGameId } from '../repositories/gamePlatformsRepository.js';
+import { GamePlatformsRepository } from '../repositories/gamePlatformsRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 
 export class GamePlatformsController {
@@ -9,7 +9,7 @@ export class GamePlatformsController {
    * @returns {Promise<Array>} An array of platform objects associated with the game.
    */
   static async getPlatformsByGameId(gameId) {
-    const gamePlatform = await findGamePlatformsByGameId(gameId);
+    const gamePlatform = await GamePlatformsRepository.findGamePlatformsByGameId(gameId);
 
     if (!gamePlatform.length) {
       throw new ApolloError(`No platforms found for game with ID ${gameId}`);

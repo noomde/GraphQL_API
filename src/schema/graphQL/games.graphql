@@ -19,7 +19,8 @@ type Platform {
 }
 
 type GamePlatform {
-  platform: Platform!
+  id: Int!
+  name: String!
   platformMetascore: Int
 }
 

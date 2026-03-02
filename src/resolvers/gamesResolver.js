@@ -1,6 +1,6 @@
-import { GamesController } from '../controller/gamesController';
-import { ScoreController } from '../controller/scoresController.js';
-import { GamePlatformController } from '../controller/gamePlatformsController.js';
+import { GamesController } from '../controller/gamesController.js';
+import { ScoresController } from '../controller/scoresController.js';
+import { GamePlatformsController } from '../controller/gamePlatformsController.js';
 
 export default {
   Query: {
@@ -69,7 +69,7 @@ export default {
      * @returns {Promise<Array>} An array of scores associated with the game.
      */
     scores: async (parent) => {
-      return await ScoreController.getScoresByGameId(parent.id);
+      return await ScoresController.getScoresByGameId(parent.id);
     },
 
     /**
@@ -79,7 +79,7 @@ export default {
      * @returns {Promise<Array>} An array of platforms associated with the game.
      */
     platforms: async (parent) => {
-      return await GamePlatformController.getPlatformsByGameId(parent.id);
+      return await GamePlatformsController.getPlatformsByGameId(parent.id);
     },
   },
 };

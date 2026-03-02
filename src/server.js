@@ -6,6 +6,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 
+import { typeDefs } from './schema/graphQL/index.js';
+import resolvers from './resolvers/index.js';
 import { connectToDatabase } from './config/database.js';
 dotenv.config();
 

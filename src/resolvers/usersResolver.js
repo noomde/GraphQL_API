@@ -1,4 +1,4 @@
-import { UsersController } from '../controller/usersController';
+import { UsersController } from '../controller/usersController.js';
 
 export default {
   Mutation: {

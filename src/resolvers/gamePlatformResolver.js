@@ -1,4 +1,4 @@
-import { GamePlatformsController } from '../controller/gamePlatformsController';
+import { GamePlatformsController } from '../controller/gamePlatformsController.js';
 
 export default {
   Query: {
