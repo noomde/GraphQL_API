@@ -3,7 +3,11 @@ type User {
     username: String!
 }
 
+type AuthPayload {
+    token: String!
+}
+
 extend type Mutation {
     registerUser(username: String!, password: String!): User!
-    loginUser(username: String!, password: String!): User!
+    loginUser(username: String!, password: String!): AuthPayload!
 }

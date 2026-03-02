@@ -7,23 +7,31 @@ export class UsersController {
   /**
    * Registers a new user in the repository.
    *
-   * @param {object} userData - The data for the user to be registered, including username and password.
-   * @returns
+   * @param {string} username - The username of the user to be registered.
+   * @param {string} password - The password of the user to be registered.
+   * @returns {Promise<Object>} The newly created user object.
    */
-  static async registerUser(userData) {
+  static async registerUser(username, password) {
     const existingUser = await UsersRepository.findUserByUsername(
-      userData.username,
+      username,
     );
     if (existingUser) {
       throw new ApolloError('User already exists');
     }
 
     // salt and hash the password before storing it in the database
-    const passwordHash = await this.hashAndSaltPassword(userData.password);
+    const passwordHash = await this.hashAndSaltPassword(password);
 
-    return await UsersRepository.insert(userData.username, passwordHash);
+    return await UsersRepository.insert(username, passwordHash);
   }
 
+  /**
+   * Logs in a user by verifying their credentials and generating a JWT token.
+   *
+   * @param {string} username - The username of the user to be logged in.
+   * @param {string} password - The password of the user to be logged in.
+   * @returns {Promise<Object>} The authentication payload containing the JWT token.
+   */
   static async loginUser(username, password) {
     const user = await UsersRepository.findUserByUsername(username);
     if (!user) {

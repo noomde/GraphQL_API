@@ -9,8 +9,8 @@ export default {
      * @param {*} userData - The data for the user to be registered.
      * @returns {Promise<Object>} The new user object.
      */
-    registerUser: async (_, { userData }) => {
-      return await UsersController.registerUser(userData);
+    registerUser: async (_, { username, password }) => {
+      return await UsersController.registerUser(username, password);
     },
 
     /**
