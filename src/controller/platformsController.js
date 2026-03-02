@@ -8,7 +8,7 @@ export class PlatformsController {
    * @returns {Promise<Array>} An array of platforms.
    */
   static async getAllPlatforms() {
-    return await PlatformsRepository.getAllPlatforms();
+    return await PlatformsRepository.findAllPlatforms();
   }
 
   /**
@@ -19,7 +19,7 @@ export class PlatformsController {
    * @throws {ApolloError} If the platform with the specified ID is not found.
    */
   static async getPlatformById(id) {
-    const platform = await PlatformsRepository.getPlatformById(id);
+    const platform = await PlatformsRepository.findPlatformById(id);
     if (!platform) {
       throw new ApolloError(`Platform with ID ${id} not found`);
     }

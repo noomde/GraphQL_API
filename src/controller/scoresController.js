@@ -8,7 +8,7 @@ export class ScoresController {
    * @returns {Promise<Array>} An array of scores.
    */
   static async getAllScores() {
-    return await ScoresRepository.getAllScores();
+    return await ScoresRepository.findAllScores();
   }
 
   /**

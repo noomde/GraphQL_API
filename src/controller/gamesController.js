@@ -19,7 +19,7 @@ export class GamesController {
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
   static async getGameById(id) {
-    const game = await GamesRepository.getGameById(id);
+    const game = await GamesRepository.findGameById(id);
     if (!game) {
       throw new ApolloError(`Game with ID ${id} not found`);
     }
