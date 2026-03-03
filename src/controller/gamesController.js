@@ -1,5 +1,5 @@
 import { GamesRepository } from '../repositories/gamesRepository.js';
-import { ApolloError } from 'apollo-server-errors';
+import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
 export class GamesController {
   /**
@@ -31,15 +31,20 @@ export class GamesController {
    * Creates a new game in the repository.
    *
    * @param {Object} gameData - The data for the game to be created.
+   * @param {Object} user - The authenticated user performing the update.
    * @returns {Promise<Object>} The created game.
    * @throws {ApolloError} If the game title is missing.
    */
-  static async createGame(gameData) {
-    if (!gameData.title) {
-      throw new ApolloError('Game title is required');
+  static async createGame(gameData, user) {
+    if (!user) {
+      throw new AuthenticationError('You are not authenticated to perform this action');
     }
 
-    return await GamesRepository.createGame(gameData);
+    if (!gameData) {
+      throw new ApolloError('Game data is required');
+    }
+
+    return await GamesRepository.insertGame(gameData);
   }
 
   /**
@@ -47,10 +52,15 @@ export class GamesController {
    *
    * @param {number} id - The ID of the game to update.
    * @param {Object} gameData - The data for the game to be updated.
+   * @param {Object} user - The authenticated user performing the update.
    * @returns {Promise<Object>} The updated game.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
-  static async updateGame(id, gameData) {
+  static async updateGame(id, gameData, user) {
+    if (!user) {
+      throw new AuthenticationError('You are not authenticated to perform this action');
+    }
+
     const updatedGame = await GamesRepository.updateGame(id, gameData);
     if (!updatedGame) {
       throw new ApolloError(`Game with ID ${id} not found`);
@@ -63,10 +73,15 @@ export class GamesController {
    * Deletes a game from the repository.
    *
    * @param {number} id - The ID of the game to delete.
+   * @param {Object} user - The authenticated user performing the update.
    * @returns {Promise<Object>} A success message if the game was deleted.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
-  static async deleteGame(id) {
+  static async deleteGame(id, user) {
+    if (!user) {
+      throw new AuthenticationError('You are not authenticated to perform this action');
+    }
+
     const status = await GamesRepository.deleteGame(id);
     if (!status) {
       throw new ApolloError(`Game with ID ${id} not found`);
