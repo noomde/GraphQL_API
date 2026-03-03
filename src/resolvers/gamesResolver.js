@@ -1,6 +1,7 @@
 import { GamesController } from '../controller/gamesController.js';
 import { ScoresController } from '../controller/scoresController.js';
 import { GamePlatformsController } from '../controller/gamePlatformsController.js';
+import { ensureAuthenticated } from '../middleware/auth.js';
 
 export default {
   Query: {
@@ -33,8 +34,9 @@ export default {
      * @param {*} gameData - The data for the game to be created.
      * @returns {Promise<Object>} The created game object.
      */
-    createGame: async (_, args) => {
-      return await GamesController.createGame(args);
+    createGame: async (_, args, context) => {
+      await ensureAuthenticated(context);
+      return await GamesController.createGame(args, context.user);
     },
 
     /**
@@ -45,8 +47,9 @@ export default {
      * @param {*} gameData - The data for the game to be updated.
      * @returns {Promise<Object>} The updated game object.
      */
-    updateGame: async (_, { id, gameData }) => {
-      return await GamesController.updateGame(id, gameData);
+    updateGame: async (_, { id, gameData }, context) => {
+      await ensureAuthenticated(context);
+      return await GamesController.updateGame(id, gameData, context.user);
     },
 
     /**
@@ -56,8 +59,9 @@ export default {
      * @param {*} id - The ID of the game to delete.
      * @returns {boolean} True if the game was successfully deleted, false otherwise.
      */
-    deleteGame: async (_, { id }) => {
-      return await GamesController.deleteGame(id);
+    deleteGame: async (_, { id }, context) => {
+      await ensureAuthenticated(context);
+      return await GamesController.deleteGame(id, context.user);
     },
   },
 

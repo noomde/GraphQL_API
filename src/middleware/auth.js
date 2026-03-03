@@ -1,3 +1,4 @@
+import { AuthenticationError } from 'apollo-server-errors'
 import { JsonWebToken } from '../lib/jsonWebToken.js'
 import http from 'node:http'
 
@@ -28,5 +29,16 @@ export async function authenticateJWT(req) {
     err.cause = error
 
     next(err)
+  }
+}
+
+/**
+ * Ensures that the user is authenticated before allowing access to a resolver.
+ *
+ * @param {Object} context - The GraphQL context object.
+ */
+export async function ensureAuthenticated(context) {
+  if (!context.user) {
+    throw new AuthenticationError('You are not authenticated to perform this action')
   }
 }
