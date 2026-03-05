@@ -16,7 +16,7 @@ export class UsersController {
       username,
     );
     if (existingUser) {
-      throw new ApolloError('User already exists');
+      throw new ApolloError('User already exists', 'USER_ALREADY_EXISTS');
     }
 
     // salt and hash the password before storing it in the database
@@ -35,12 +35,12 @@ export class UsersController {
   static async loginUser(username, password) {
     const user = await UsersRepository.findUserByUsername(username);
     if (!user) {
-      throw new ApolloError('Invalid credentials');
+      throw new ApolloError('Invalid credentials', 'INVALID_CREDENTIALS');
     }
 
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
-      throw new ApolloError('Invalid credentials');
+      throw new ApolloError('Invalid credentials', 'INVALID_CREDENTIALS');
     }
 
     const token = await JsonWebToken.encodeUser(user, '1h');
