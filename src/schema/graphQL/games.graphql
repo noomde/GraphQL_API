@@ -60,7 +60,7 @@ extend type Mutation {
     title: String
     releaseDate: String
     rating: String
-    genres: String!
+    genres: String
     description: String
     developer: String
     publisher: String

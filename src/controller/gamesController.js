@@ -1,4 +1,3 @@
-import { meta } from '@eslint/js';
 import { GamesRepository } from '../repositories/gamesRepository.js';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 

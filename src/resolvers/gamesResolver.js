@@ -47,9 +47,9 @@ export default {
      * @param {*} gameData - The data for the game to be updated.
      * @returns {Promise<Object>} The updated game object.
      */
-    updateGame: async (_, { id, gameData }, context) => {
+    updateGame: async (_, args, context) => {
       await ensureAuthenticated(context);
-      return await GamesController.updateGame(id, gameData, context.user);
+      return await GamesController.updateGame(args.id, args, context.user);
     },
 
     /**
