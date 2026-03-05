@@ -1,3 +1,4 @@
+import { meta } from '@eslint/js';
 import { GamesRepository } from '../repositories/gamesRepository.js';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
@@ -37,14 +38,25 @@ export class GamesController {
    */
   static async createGame(gameData, user) {
     if (!user) {
-      throw new AuthenticationError('You are not authenticated to perform this action');
+      throw new AuthenticationError(
+        'You are not authenticated to perform this action',
+      );
     }
 
     if (!gameData) {
       throw new ApolloError('Game data is required');
     }
 
-    return await GamesRepository.insertGame(gameData);
+    return await GamesRepository.insertGame({
+      metacritic_id: gameData.metacriticId,
+      title: gameData.title,
+      release_date: gameData.releaseDate,
+      rating: gameData.rating,
+      genres: gameData.genres,
+      description: gameData.description,
+      developer: gameData.developer,
+      publisher: gameData.publisher,
+    });
   }
 
   /**
@@ -58,10 +70,21 @@ export class GamesController {
    */
   static async updateGame(id, gameData, user) {
     if (!user) {
-      throw new AuthenticationError('You are not authenticated to perform this action');
+      throw new AuthenticationError(
+        'You are not authenticated to perform this action',
+      );
     }
 
-    const updatedGame = await GamesRepository.updateGame(id, gameData);
+    const updatedGame = await GamesRepository.updateGame(id, {
+      metacritic_id: gameData.metacriticId,
+      title: gameData.title,
+      release_date: gameData.releaseDate,
+      rating: gameData.rating,
+      genres: gameData.genres,
+      description: gameData.description,
+      developer: gameData.developer,
+      publisher: gameData.publisher,
+    });
     if (!updatedGame) {
       throw new ApolloError(`Game with ID ${id} not found`);
     }
@@ -79,7 +102,9 @@ export class GamesController {
    */
   static async deleteGame(id, user) {
     if (!user) {
-      throw new AuthenticationError('You are not authenticated to perform this action');
+      throw new AuthenticationError(
+        'You are not authenticated to perform this action',
+      );
     }
 
     const status = await GamesRepository.deleteGame(id);
