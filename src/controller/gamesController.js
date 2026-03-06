@@ -21,7 +21,7 @@ export class GamesController {
   static async getGameById(id) {
     const game = await GamesRepository.findGameById(id);
     if (!game) {
-      throw new ApolloError(`Game with ID ${id} not found`);
+      throw new ApolloError(`Game with ID ${id} not found`, 'GAME_NOT_FOUND');
     }
 
     return game;
@@ -39,11 +39,12 @@ export class GamesController {
     if (!user) {
       throw new AuthenticationError(
         'You are not authenticated to perform this action',
+        'UNAUTHENTICATED'
       );
     }
 
     if (!gameData) {
-      throw new ApolloError('Game data is required');
+      throw new ApolloError('Game data is required', 'GAME_DATA_REQUIRED');
     }
 
     return await GamesRepository.insertGame({
@@ -71,6 +72,7 @@ export class GamesController {
     if (!user) {
       throw new AuthenticationError(
         'You are not authenticated to perform this action',
+        'UNAUTHENTICATED'
       );
     }
 
@@ -85,7 +87,7 @@ export class GamesController {
       publisher: gameData.publisher,
     });
     if (!updatedGame) {
-      throw new ApolloError(`Game with ID ${id} not found`);
+      throw new ApolloError(`Game with ID ${id} not found`, 'GAME_NOT_FOUND');
     }
 
     return updatedGame;
@@ -108,7 +110,7 @@ export class GamesController {
 
     const status = await GamesRepository.deleteGame(id);
     if (!status) {
-      throw new ApolloError(`Game with ID ${id} not found`);
+      throw new ApolloError(`Game with ID ${id} not found`, 'GAME_NOT_FOUND');
     }
 
     return {
