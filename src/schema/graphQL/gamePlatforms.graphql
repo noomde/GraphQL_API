@@ -1,0 +1,9 @@
+type GamePlatform {
+  id: Int!
+  name: String!
+  platformMetascore: Int
+}
+
+extend type Query {
+  gamePlatform(gameId: Int!): [GamePlatform!]!
+}

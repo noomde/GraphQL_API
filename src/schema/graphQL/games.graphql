@@ -1,0 +1,70 @@
+type Game {
+  id: Int!
+  metacriticId: Int
+  title: String!
+  releaseDate: String
+  rating: String
+  genres: String!
+  description: String
+  developer: String
+  publisher: String
+
+  platforms: [GamePlatform!]!
+  scores: Score
+}
+
+type Platform {
+  id: Int!
+  name: String!
+}
+
+type GamePlatform {
+  id: Int!
+  name: String!
+  platformMetascore: Int
+}
+
+type Score {
+  metascore: Int
+  metascoreCount: Int
+  metascoreSentiment: String
+  userScore: Float
+  userScoreCount: Int
+  userScoreSentiment: String
+}
+
+type DeleteGameResponse {
+  message: String!
+}
+
+extend type Query {
+  games: [Game!]!
+  game(id: Int!): Game
+}
+
+extend type Mutation {
+  createGame(
+    metacriticId: Int
+    title: String!
+    releaseDate: String
+    rating: String
+    genres: String!
+    description: String
+    developer: String
+    publisher: String
+  ): Game!
+
+  updateGame(
+    id: Int!
+    metacriticId: Int
+    title: String
+    releaseDate: String
+    rating: String
+    genres: String
+    description: String
+    developer: String
+    publisher: String
+  ): Game!
+
+  deleteGame(id: Int!): DeleteGameResponse!
+}

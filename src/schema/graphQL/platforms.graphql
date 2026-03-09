@@ -1,0 +1,9 @@
+type Platform {
+  id: Int!
+  name: String!
+}
+
+extend type Query {
+  platforms: [Platform!]!
+  platform(id: Int!): Platform
+}
