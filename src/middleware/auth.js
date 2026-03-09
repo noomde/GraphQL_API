@@ -15,7 +15,13 @@ import http from 'node:http'
  */
 export async function authenticateJWT(req) {
   try {
-    const [authenticationScheme, token] = req.headers.authorization?.split(' ')
+    const authorization = req.headers.authorization
+
+    if (!authorization) {
+      throw new Error('Missing authorization header')
+    }
+
+    const [authenticationScheme, token] = authorization.split(' ')
 
     if (authenticationScheme !== 'Bearer') {
       throw new Error('Invalid authentication scheme.')
@@ -27,8 +33,7 @@ export async function authenticateJWT(req) {
     const err = new Error(http.STATUS_CODES[statusCode])
     err.status = statusCode
     err.cause = error
-
-    next(err)
+    throw err
   }
 }
 
@@ -39,6 +44,6 @@ export async function authenticateJWT(req) {
  */
 export async function ensureAuthenticated(context) {
   if (!context.user) {
-    throw new AuthenticationError('You are not authenticated to perform this action')
+    throw new AuthenticationError('You are not authenticated to perform this action', 'UNAUTHENTICATED')
   }
 }

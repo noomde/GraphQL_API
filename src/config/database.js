@@ -16,7 +16,6 @@ export const connectToDatabase = async (connectionString) => {
       ;(async () => {
         try {
           await pool.end()
-          logger.info(`PostgreSQL disconnected through ${signalEvent}.`)
         } finally {
           process.exit(0)
         }

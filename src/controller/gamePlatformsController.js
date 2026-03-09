@@ -10,6 +10,11 @@ export class GamePlatformsController {
    */
   static async getPlatformsByGameId(gameId) {
     const gamePlatform = await GamePlatformsRepository.findGamePlatformsByGameId(gameId);
+
+    if (!gamePlatform) {
+      throw new ApolloError(`No platforms found for game with ID ${gameId}`, 'PLATFORMS_NOT_FOUND');
+    }
+
     return gamePlatform;
   }
 }

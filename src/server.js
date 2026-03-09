@@ -39,8 +39,8 @@ try {
       try {
         const user = await authenticateJWT(req);
         return { user };
-      } catch (error) {
-        return { user: null };
+      } catch {
+        return { user: null};
       }
     },
   });
