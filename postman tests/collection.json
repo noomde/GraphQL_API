@@ -1,0 +1,1367 @@
+{
+  "info": {
+    "_postman_id": "5106a895-1c2f-41b6-af27-32dc0c00b491",
+    "name": "graphQl tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "34092415"
+  },
+  "item": [
+    {
+      "name": "setup",
+      "item": [
+        {
+          "name": "success",
+          "item": [
+            {
+              "name": "registerUser",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "const runId = Math.floor(Math.random() * 100000)\r",
+                      "\r",
+                      "pm.environment.set(\"runId\", runId);\r",
+                      "pm.environment.set(\"username\", `user_${runId}`);\r",
+                      "pm.environment.set(\"gameTitle\", `Game_${runId}`);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User created successfully\", function () {\r",
+                      "  pm.expect(response.data.registerUser).to.have.property(\"id\");\r",
+                      "  pm.expect(response.data.registerUser.username).to.eql(pm.environment.get(\"username\"));\r",
+                      "});\r",
+                      "\r",
+                      "pm.environment.set(\"userId\", response.data.registerUser.id);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation RegisterUser($username: String!, $password: String!) { registerUser(username: $username, password: $password) { id username } }\",\r\n  \"variables\": {\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "loginUser",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"User logged in successfully\", function () {\r",
+                      "  pm.expect(response.data.loginUser).to.have.property(\"token\");\r",
+                      "  pm.expect(response.data.loginUser.token).to.be.a(\"string\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.environment.set(\"apiToken\", response.data.loginUser.token);\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation loginUser($username: String!, $password: String!) { loginUser(username: $username, password: $password) { token } }\",\r\n  \"variables\": {\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response has no errors\", function () {\r",
+                  "    pm.expect(response.errors).to.be.undefined;\r",
+                  "});\r",
+                  ""
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "fail",
+          "item": [
+            {
+              "name": "registerUser",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"User already exists\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"USER_ALREADY_EXISTS\");\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation RegisterUser($username: String!, $password: String!) { registerUser(username: $username, password: $password) { id username } }\",\r\n  \"variables\": {\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "loginUser",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"Invalid credentials\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"INVALID_CREDENTIALS\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation loginUser($username: String!, $password: String!) { loginUser(username: $username, password: $password) { token } }\",\r\n  \"variables\": {\r\n    \"username\": \"AnthonHeterJag\",\r\n    \"password\": \"{{password}}\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response has errors\", function () {\r",
+                  "    pm.expect(response.errors).to.exist;\r",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "pm.test(\"Status is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "games",
+      "item": [
+        {
+          "name": "success",
+          "item": [
+            {
+              "name": "getGames",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const games = response.data.games;\r",
+                      "\r",
+                      "pm.test(\"Response has no errors\", function () {\r",
+                      "    pm.expect(response.errors).to.be.undefined;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Got all games successfully\", function () {\r",
+                      "    pm.expect(games.length).to.be.at.least(2000)\r",
+                      "    pm.expect(games).to.be.an(\"array\")\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { games { id metacriticId title releaseDate rating genres description developer publisher } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const game = response.data.createGame;\r",
+                      "\r",
+                      "pm.environment.set(\"gameId\", game.id)\r",
+                      "\r",
+                      "pm.test(\"Create game successfully\", function() {\r",
+                      "    pm.expect(game).to.exist\r",
+                      "    pm.expect(game).to.have.property(\"id\");\r",
+                      "    pm.expect(game).to.have.property(\"title\");\r",
+                      "    pm.expect(game.title).to.eql(\"Postman Test Game\");\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Release date format is YYYY-MM-DD\", function () {\r",
+                      "    const dateRegex = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
+                      "\r",
+                      "    pm.expect(game.releaseDate).to.match(dateRegex)\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation createGame($title: String!, $genres: String!, $releaseDate: String, $rating: String, $description: String, $developer: String, $publisher: String) { createGame(title: $title, genres: $genres, releaseDate: $releaseDate, rating: $rating, description: $description, developer: $developer, publisher: $publisher) { id title releaseDate, metacriticId genres developer publisher } }\",\r\n  \"variables\": {\r\n    \"title\": \"Postman Test Game\",\r\n    \"genres\": \"Action\",\r\n    \"releaseDate\": \"2024-01-01\",\r\n    \"rating\": \"T\",\r\n    \"description\": \"Created from Postman test\",\r\n    \"developer\": \"Test Studio\",\r\n    \"publisher\": \"Test Publisher\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const game = response.data.game;\r",
+                      "\r",
+                      "pm.test(\"Got game successfully\", function() {\r",
+                      "    pm.expect(game).to.exist\r",
+                      "    pm.expect(game).to.have.property(\"id\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Release date format is YYYY-MM-DD\", function () {\r",
+                      "    const dateRegex = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
+                      "\r",
+                      "    pm.expect(game.releaseDate).to.match(dateRegex)\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query ($id: Int!) { game(id: $id) { id metacriticId title releaseDate rating genres description developer publisher } }\",\r\n  \"variables\": {\r\n    \"id\": {{gameId}}\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const game = response.data.updateGame;\r",
+                      "\r",
+                      "pm.test(\"Update game successfully\", function() {\r",
+                      "    pm.expect(game).to.exist\r",
+                      "    pm.expect(game).to.have.property(\"id\");\r",
+                      "    pm.expect(game).to.have.property(\"title\");\r",
+                      "    pm.expect(game.title).to.eql(\"Postman Test Game updated\");\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Release date format is YYYY-MM-DD\", function () {\r",
+                      "    const dateRegex = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
+                      "\r",
+                      "    pm.expect(game.releaseDate).to.match(dateRegex)\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation updateGame($id: Int!, $title: String!, $genres: String!, $releaseDate: String, $rating: String, $description: String, $developer: String, $publisher: String) { updateGame(id: $id, title: $title, genres: $genres, releaseDate: $releaseDate, rating: $rating, description: $description, developer: $developer, publisher: $publisher) { id title releaseDate metacriticId genres developer publisher } }\",\r\n  \"variables\": {\r\n    \"id\": {{gameId}},\r\n    \"title\": \"Postman Test Game updated\",\r\n    \"genres\": \"Action updated\",\r\n    \"releaseDate\": \"2024-01-02\",\r\n    \"rating\": \"M\",\r\n    \"description\": \"Updated from Postman test\",\r\n    \"developer\": \"Test Studio\",\r\n    \"publisher\": \"Test Publisher\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deleteGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const game = response.data.deleteGame;\r",
+                      "\r",
+                      "pm.test(\"Delete game successfully\", function() {\r",
+                      "    pm.expect(game.message).to.exist\r",
+                      "    pm.expect(game.message).to.include(\"deleted\");\r",
+                      "    pm.expect(game.message).to.include(pm.environment.get(\"gameId\"));\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation deleteGame($id: Int!) { deleteGame(id: $id) { message } }\",\r\n  \"variables\": {\r\n    \"id\": {{gameId}}\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "nestedGame",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "pm.environment.set(\"gameId\", Math.floor(Math.random() * 10000) + 1);"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const game = response.data.game;\r",
+                      "const platforms = response.data.game.platforms;\r",
+                      "\r",
+                      "pm.test(\"Got game successfully\", function() {\r",
+                      "    pm.expect(game).to.exist\r",
+                      "    pm.expect(game).to.have.property(\"id\")\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Release date format is YYYY-MM-DD\", function () {\r",
+                      "    const dateRegex = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
+                      "\r",
+                      "    pm.expect(game.releaseDate).to.match(dateRegex)\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Got platforms successfully\", function() {\r",
+                      "    pm.expect(platforms).to.exist\r",
+                      "    pm.expect(platforms.length).to.be.at.least(1)\r",
+                      "    pm.expect(platforms[0]).to.have.property(\"id\")\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query ($id: Int!) { game(id: $id) { id releaseDate title platforms { id name } } }\",\r\n  \"variables\": {\r\n    \"id\": {{gameId}}\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response has no errors\", function () {\r",
+                  "    pm.expect(response.errors).to.be.undefined;\r",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "fail",
+          "item": [
+            {
+              "name": "getGames",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Returned an error\", function () {\r",
+                      "    pm.expect(response.errors).to.exist;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "    pm.expect(response.errors[0].message).to.include(\"DarrowDate\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { games { id metacriticId title DarrowDate rating genres description developer publisher } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"You are not authenticated to perform this action\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"UNAUTHENTICATED\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation createGame($title: String!, $genres: String!, $releaseDate: String, $rating: String, $description: String, $developer: String, $publisher: String) { createGame(title: $title, genres: $genres, releaseDate: $releaseDate, rating: $rating, description: $description, developer: $developer, publisher: $publisher) { id title releaseDate, metacriticId genres developer publisher } }\",\r\n  \"variables\": {\r\n    \"title\": \"Postman Test Game\",\r\n    \"genres\": \"Action\",\r\n    \"releaseDate\": \"2024-01-01\",\r\n    \"rating\": \"T\",\r\n    \"description\": \"Created from Postman test\",\r\n    \"developer\": \"Test Studio\",\r\n    \"publisher\": \"Test Publisher\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"Game with ID 999999 not found\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"GAME_NOT_FOUND\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query ($id: Int!) { game(id: $id) { id metacriticId title releaseDate rating genres description developer publisher } }\",\r\n  \"variables\": {\r\n    \"id\": 999999\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"You are not authenticated to perform this action\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"UNAUTHENTICATED\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation updateGame($id: Int!, $title: String!, $genres: String!, $releaseDate: String, $rating: String, $description: String, $developer: String, $publisher: String) { updateGame(id: $id, title: $title, genres: $genres, releaseDate: $releaseDate, rating: $rating, description: $description, developer: $developer, publisher: $publisher) { id title releaseDate metacriticId genres developer publisher } }\",\r\n  \"variables\": {\r\n    \"id\": {{gameId}},\r\n    \"title\": \"Postman Test Game updated\",\r\n    \"genres\": \"Action updated\",\r\n    \"releaseDate\": \"2024-01-02\",\r\n    \"rating\": \"M\",\r\n    \"description\": \"Updated from Postman test\",\r\n    \"developer\": \"Test Studio\",\r\n    \"publisher\": \"Test Publisher\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateGameBadId",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"Game with ID 999999 not found\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"GAME_NOT_FOUND\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation updateGame($id: Int!, $title: String!, $genres: String!, $releaseDate: String, $rating: String, $description: String, $developer: String, $publisher: String) { updateGame(id: $id, title: $title, genres: $genres, releaseDate: $releaseDate, rating: $rating, description: $description, developer: $developer, publisher: $publisher) { id title releaseDate metacriticId genres developer publisher } }\",\r\n  \"variables\": {\r\n    \"id\": 999999,\r\n    \"title\": \"Postman Test Game updated\",\r\n    \"genres\": \"Action updated\",\r\n    \"releaseDate\": \"2024-01-02\",\r\n    \"rating\": \"M\",\r\n    \"description\": \"Updated from Postman test\",\r\n    \"developer\": \"Test Studio\",\r\n    \"publisher\": \"Test Publisher\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deleteGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"You are not authenticated to perform this action\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"UNAUTHENTICATED\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation deleteGame($id: Int!) { deleteGame(id: $id) { message } }\",\r\n  \"variables\": {\r\n    \"id\": {{gameId}}\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "nestedGame",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"Game with ID 999999 not found\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"GAME_NOT_FOUND\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query ($id: Int!) { game(id: $id) { id releaseDate title platforms { id name } } }\",\r\n  \"variables\": {\r\n    \"id\": 999999\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response has errors\", function () {\r",
+                  "    pm.expect(response.errors).to.exist;\r",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "scores & platforms",
+      "item": [
+        {
+          "name": "success",
+          "item": [
+            {
+              "name": "scores",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const scores = response.data.scores;\r",
+                      "\r",
+                      "pm.test(\"Response has no errors\", function () {\r",
+                      "    pm.expect(response.errors).to.be.undefined;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Got all scores successfully\", function () {\r",
+                      "    pm.expect(scores.length).to.be.at.least(2000)\r",
+                      "    pm.expect(scores).to.be.an(\"array\")\r",
+                      "    pm.expect(scores[0]).to.have.property(\"metascore\")\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { scores { metascore metascoreCount metascoreSentiment userScore userScoreCount userScoreSentiment } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "platforms",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const platforms = response.data.platforms;\r",
+                      "\r",
+                      "pm.test(\"Response has no errors\", function () {\r",
+                      "    pm.expect(response.errors).to.be.undefined;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Got all scores successfully\", function () {\r",
+                      "    pm.expect(platforms.length).to.eql(24)\r",
+                      "    pm.expect(platforms).to.be.an(\"array\")\r",
+                      "    pm.expect(platforms[0]).to.have.property(\"name\")\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { platforms { id name } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "pm.test(\"Status is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response has no errors\", function () {\r",
+                  "    pm.expect(response.errors).to.be.undefined;\r",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "fail",
+          "item": [
+            {
+              "name": "scores",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Returned an error\", function () {\r",
+                      "    pm.expect(response.errors).to.exist;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "    pm.expect(response.errors[0].message).to.include(\"metaCore\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { scores { metaCore metascoreCount metascoreSentiment userScore userScoreCount userScoreSentiment } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "platforms",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status is 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Returned an error\", function () {\r",
+                      "    pm.expect(response.errors).to.exist;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "    pm.expect(response.errors[0].message).to.include(\"gameName\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { platforms { id gameName } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Response has errors\", function () {\r",
+                  "    pm.expect(response.errors).to.exist;\r",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
