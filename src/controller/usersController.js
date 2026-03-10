@@ -1,6 +1,6 @@
 import { UsersRepository } from '../repositories/usersRepository.js';
 import { ApolloError } from 'apollo-server-errors';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { JsonWebToken } from '../lib/jsonWebToken.js';
 
 export class UsersController {
