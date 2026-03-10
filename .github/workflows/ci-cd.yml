@@ -25,10 +25,13 @@ jobs:
 
       - name: Create .env for CI
         run: |
-           echo "path=../data/metacritic_games.csv" >> .env
+           echo "CSV_PATH=../data/metacritic_games_test_data.csv" >> .env
            echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" >> .env
            echo "JWT_PUBLIC_KEY=${{ secrets.JWT_PUBLIC_KEY }}" >> .env
            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+
+      - name: run seed scrip
+        run: npm run etl
 
       - name: Run tests
         run: npm test
