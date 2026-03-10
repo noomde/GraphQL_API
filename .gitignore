@@ -194,6 +194,3 @@ $RECYCLE.BIN/
 
 # Pem files
 *.pem
-
-# csv files
-*.csv

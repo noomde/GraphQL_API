@@ -23,5 +23,5 @@ export const database = new Pool({
  */
 export const paths = {
     sql: path.join(__dirname, 'sql'),
-    csv: path.join(__dirname, '../data/metacritic_games.csv'),
+    csv: path.join(__dirname, process.env.CSV_PATH || '../data/metacritic_games_test_data.csv'),
 };
