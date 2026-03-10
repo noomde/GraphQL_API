@@ -33,12 +33,20 @@ type Score {
   userScoreSentiment: String
 }
 
+type GameList {
+  items: [Game!]!
+  totalCount: Int!
+  page: Int!
+  limit: Int!
+  totalPages: Int!
+}
+
 type DeleteGameResponse {
   message: String!
 }
 
 extend type Query {
-  games(page: Int = 1, limit: Int = 50): [Game!]!
+  games(page: Int = 1, limit: Int = 50): GameList!
   game(id: Int!): Game
 }
 

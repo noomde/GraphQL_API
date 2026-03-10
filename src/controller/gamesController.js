@@ -28,6 +28,15 @@ export class GamesController {
   }
 
   /**
+   * Retrieves the total count of games in the repository.
+   *
+   * @returns {Promise<number>} The total count of games.
+   */
+  static async getTotalGamesCount() {
+    return await GamesRepository.getTotalGamesCount();
+  }
+
+  /**
    * Creates a new game in the repository.
    *
    * @param {Object} gameData - The data for the game to be created.

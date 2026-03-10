@@ -97,6 +97,14 @@ export class GamesRepository {
     return rows;
   }
 
+  static async getTotalGamesCount() {
+    const { rows } = await getPool().query(`
+    SELECT COUNT(*) FROM games
+  `);
+
+    return Number(rows[0].count);
+  }
+
   static async updateGame(id, gameData) {
     const { rows } = await getPool().query(
       `UPDATE games SET
@@ -136,9 +144,10 @@ export class GamesRepository {
   }
 
   static async deleteGame(id) {
-    const { rowCount } = await getPool().query(`DELETE FROM games WHERE id = $1`, [
-      id,
-    ]);
+    const { rowCount } = await getPool().query(
+      `DELETE FROM games WHERE id = $1`,
+      [id],
+    );
     return rowCount > 0;
   }
 }

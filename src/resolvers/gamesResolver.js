@@ -16,7 +16,16 @@ export default {
 
       const offset = (safePage - 1) * safeLimit;
 
-      return await GamesController.getAllGames(safeLimit, offset);
+      const items = await GamesController.getAllGames(safeLimit, offset);
+      const totalCount = await GamesController.getTotalGamesCount();
+
+      return {
+        items,
+        totalCount,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(totalCount / safeLimit),
+      };
     },
 
     /**
