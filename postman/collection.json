@@ -580,7 +580,7 @@
                   "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "pm.environment.set(\"gameId\", Math.floor(Math.random() * 10000) + 1);"
+                      "pm.environment.set(\"gameId\", Math.floor(Math.random() * 2000) + 1);"
                     ],
                     "type": "text/javascript",
                     "packages": {},
