@@ -16,14 +16,17 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:api": "npx newman run postman/collection.json -e postman/environment.json",
+    "test": "start-server-and-test start http://localhost:3001/health test:api",
     "lint": "eslint .",
     "etl": "node ELT/pipeline.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.0",
-    "globals": "^17.3.0"
+    "globals": "^17.3.0",
+    "newman": "^6.2.2",
+    "start-server-and-test": "^2.1.5"
   },
   "dependencies": {
     "@graphql-tools/load-files": "^7.0.1",

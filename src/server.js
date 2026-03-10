@@ -40,9 +40,14 @@ try {
         const user = await authenticateJWT(req);
         return { user };
       } catch {
-        return { user: null};
+        return { user: null };
       }
     },
+  });
+
+  // For running test cases with start-server-and-test
+  app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
   });
 
   await apolloServer.start();

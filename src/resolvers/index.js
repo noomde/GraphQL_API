@@ -12,11 +12,11 @@ export default {
     ...userResolver.Query,
     ...scoresResolver.Query,
   },
-    Mutation: {
+  Mutation: {
     ...userResolver.Mutation,
     ...gamesResolver.Mutation,
-    },
-    Game: {
-        ...gamesResolver.Game
-    }
-}
+  },
+  Game: {
+    ...gamesResolver.Game,
+  },
+};
