@@ -10,8 +10,13 @@ export default {
      *
      * @returns {Promise<Array>} An array of games.
      */
-    games: async () => {
-      return await GamesController.getAllGames();
+    games: async (_, { page = 1, limit = 20 }) => {
+      const safePage = Math.max(page, 1);
+      const safeLimit = Math.min(Math.max(limit, 1), 100);
+
+      const offset = (safePage - 1) * safeLimit;
+
+      return await GamesController.getAllGames(safeLimit, offset);
     },
 
     /**

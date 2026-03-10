@@ -38,7 +38,7 @@ type DeleteGameResponse {
 }
 
 extend type Query {
-  games: [Game!]!
+  games(page: Int = 1, limit: Int = 50): [Game!]!
   game(id: Int!): Game
 }
 

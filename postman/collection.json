@@ -330,7 +330,8 @@
                       "});\r",
                       "\r",
                       "pm.test(\"Got all games successfully\", function () {\r",
-                      "    pm.expect(games.length).to.be.at.least(2000)\r",
+                      "    pm.expect(games.length).to.be.at.least(1)\r",
+                      "    pm.expect(games.length).to.be.at.most(100)\r",
                       "    pm.expect(games).to.be.an(\"array\")\r",
                       "})"
                     ],
@@ -345,7 +346,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"query\": \"query { games { id metacriticId title releaseDate rating genres description developer publisher } }\"\r\n}",
+                  "raw": "{\r\n  \"query\": \"query { games(page: 3, limit: 999) { id metacriticId title releaseDate rating genres description developer publisher } }\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
