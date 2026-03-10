@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: echo "test"
+        run: npm test
 
   deploy:
     if:
