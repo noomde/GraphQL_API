@@ -23,8 +23,14 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Run lint
+        run: npm run lint
+
       - name: Run tests
-        run: echo "test"
+        run:
+          npm start &
+          sleep 5
+          npm test
 
   deploy:
     if:
