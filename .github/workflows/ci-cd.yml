@@ -27,7 +27,7 @@ jobs:
         run: npm run lint
 
       - name: Run tests
-        run:
+        run: |
           npm start &
           sleep 5
           npm test
