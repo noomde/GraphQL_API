@@ -23,6 +23,13 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Create .env
+        run: |
+          echo "path=${{ secrets.path }}" >> .env
+          echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" >> .env
+          echo "JWT_PUBLIC_KEY=${{ secrets.JWT_PUBLIC_KEY }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+
       - name: Run lint
         run: npm run lint
 
