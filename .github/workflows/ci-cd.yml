@@ -27,10 +27,7 @@ jobs:
         run: npm run lint
 
       - name: Run tests
-        run: |
-          npm start &
-          sleep 5
-          npm test
+        run: npm run test
 
   deploy:
     if:
