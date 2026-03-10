@@ -20,8 +20,17 @@ jobs:
         with:
           node-version: 20
 
+      - name: Debug runner
+        run: |
+          uname -a
+          node -v
+          npm -v
+          echo $SHELL
+          which sh || true
+          ls -l /bin/sh || true
+
       - name: Install
-        run: npm install
+        run: npm ci
 
       - name: Create .env
         run: |
