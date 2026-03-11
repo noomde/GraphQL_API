@@ -1,4 +1,4 @@
-import "dotenv/config";
+import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 
 const privateKey = Buffer.from(process.env.JWT_PRIVATE_KEY, 'base64').toString(

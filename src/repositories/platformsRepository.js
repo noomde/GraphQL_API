@@ -20,9 +20,10 @@ export class PlatformsRepository {
    * @returns {Promise<Object>} The platform object or null if not found.
    */
   static async findPlatformById(id) {
-    const { rows } = await getPool().query(`SELECT * FROM platforms WHERE id = $1`, [
-      id,
-    ]);
+    const { rows } = await getPool().query(
+      `SELECT * FROM platforms WHERE id = $1`,
+      [id],
+    );
     return rows[0] || null;
   }
 }

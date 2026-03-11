@@ -31,15 +31,15 @@ export class SqlTransformRunner {
   /**
    * Executes a series of database operations within a transaction. If any operation fails, the transaction is rolled back.
    *
-   * @param {Function} callback 
+   * @param {Function} callback
    */
   async transaction(callback) {
-    await this.database.query("BEGIN");
+    await this.database.query('BEGIN');
     try {
       await callback();
-      await this.database.query("COMMIT");
+      await this.database.query('COMMIT');
     } catch (e) {
-      await this.database.query("ROLLBACK");
+      await this.database.query('ROLLBACK');
       throw e;
     }
   }
@@ -50,6 +50,6 @@ export class SqlTransformRunner {
    * @param {string[]} fileNames An array of SQL file names to be executed in sequence.
    */
   async runFromFiles(fileNames) {
-      return this.transaction(() => this.runSqlFiles(fileNames));
+    return this.transaction(() => this.runSqlFiles(fileNames));
   }
 }

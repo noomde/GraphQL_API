@@ -1,6 +1,6 @@
-import { AuthenticationError } from 'apollo-server-errors'
-import { JsonWebToken } from '../lib/jsonWebToken.js'
-import http from 'node:http'
+import { AuthenticationError } from 'apollo-server-errors';
+import { JsonWebToken } from '../lib/jsonWebToken.js';
+import http from 'node:http';
 
 /**
  * Authenticates a request based on a JSON Web Token (JWT).
@@ -15,25 +15,25 @@ import http from 'node:http'
  */
 export async function authenticateJWT(req) {
   try {
-    const authorization = req.headers.authorization
+    const authorization = req.headers.authorization;
 
     if (!authorization) {
-      throw new Error('Missing authorization header')
+      throw new Error('Missing authorization header');
     }
 
-    const [authenticationScheme, token] = authorization.split(' ')
+    const [authenticationScheme, token] = authorization.split(' ');
 
     if (authenticationScheme !== 'Bearer') {
-      throw new Error('Invalid authentication scheme.')
+      throw new Error('Invalid authentication scheme.');
     }
 
-    return await JsonWebToken.decodeUser(token)
+    return await JsonWebToken.decodeUser(token);
   } catch (error) {
-    const statusCode = 401
-    const err = new Error(http.STATUS_CODES[statusCode])
-    err.status = statusCode
-    err.cause = error
-    throw err
+    const statusCode = 401;
+    const err = new Error(http.STATUS_CODES[statusCode]);
+    err.status = statusCode;
+    err.cause = error;
+    throw err;
   }
 }
 
@@ -44,6 +44,9 @@ export async function authenticateJWT(req) {
  */
 export async function ensureAuthenticated(context) {
   if (!context.user) {
-    throw new AuthenticationError('You are not authenticated to perform this action', 'UNAUTHENTICATED')
+    throw new AuthenticationError(
+      'You are not authenticated to perform this action',
+      'UNAUTHENTICATED',
+    );
   }
 }

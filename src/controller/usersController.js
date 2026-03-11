@@ -12,9 +12,7 @@ export class UsersController {
    * @returns {Promise<Object>} The newly created user object.
    */
   static async registerUser(username, password) {
-    const existingUser = await UsersRepository.findUserByUsername(
-      username,
-    );
+    const existingUser = await UsersRepository.findUserByUsername(username);
     if (existingUser) {
       throw new ApolloError('User already exists', 'USER_ALREADY_EXISTS');
     }

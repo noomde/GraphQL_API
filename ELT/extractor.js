@@ -7,9 +7,9 @@ import fs from 'fs';
  * @returns {Promise<ReadableStream>} A promise that resolves to a readable stream of the CSV data.
  */
 export async function extractDataFromCSV(path) {
-    if (!fs.existsSync(path)) {
-        throw new Error(`File not found: ${path}`);
-    }
+  if (!fs.existsSync(path)) {
+    throw new Error(`File not found: ${path}`);
+  }
 
-    return fs.createReadStream(path);
+  return fs.createReadStream(path);
 }

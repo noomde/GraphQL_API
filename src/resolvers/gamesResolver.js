@@ -10,7 +10,7 @@ export default {
      *
      * @returns {Promise<Array>} An array of games.
      */
-    games: async (_, { page = 1, limit = 20 , genre}) => {
+    games: async (_, { page = 1, limit = 20, genre }) => {
       const safePage = Math.max(page, 1);
       const safeLimit = Math.min(Math.max(limit, 1), 100);
 

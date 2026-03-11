@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import { from as copyFrom } from "pg-copy-streams";
+import fs from 'fs';
+import path from 'path';
+import { from as copyFrom } from 'pg-copy-streams';
 
 export class SqlLoader {
   constructor(sqlPath) {
@@ -24,7 +24,7 @@ export class SqlLoader {
    * @returns {string} Contents of the SQL file as a string.
    */
   read(fileName) {
-    return fs.readFileSync(this.resolve(fileName), "utf8");
+    return fs.readFileSync(this.resolve(fileName), 'utf8');
   }
 
   /**
@@ -39,10 +39,7 @@ export class SqlLoader {
 
     await new Promise((resolve, reject) => {
       const dbStream = database.query(copyFrom(sql));
-      csvStream
-        .pipe(dbStream)
-        .on("finish", resolve)
-        .on("error", reject);
+      csvStream.pipe(dbStream).on('finish', resolve).on('error', reject);
     });
   }
 }

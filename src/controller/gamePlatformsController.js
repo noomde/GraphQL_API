@@ -9,10 +9,14 @@ export class GamePlatformsController {
    * @returns {Promise<Array>} An array of platform objects associated with the game.
    */
   static async getPlatformsByGameId(gameId) {
-    const gamePlatform = await GamePlatformsRepository.findGamePlatformsByGameId(gameId);
+    const gamePlatform =
+      await GamePlatformsRepository.findGamePlatformsByGameId(gameId);
 
     if (!gamePlatform) {
-      throw new ApolloError(`No platforms found for game with ID ${gameId}`, 'PLATFORMS_NOT_FOUND');
+      throw new ApolloError(
+        `No platforms found for game with ID ${gameId}`,
+        'PLATFORMS_NOT_FOUND',
+      );
     }
 
     return gamePlatform;

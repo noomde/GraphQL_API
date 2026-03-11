@@ -54,7 +54,7 @@ export class GamesController {
     if (!user) {
       throw new AuthenticationError(
         'You are not authenticated to perform this action',
-        'UNAUTHENTICATED'
+        'UNAUTHENTICATED',
       );
     }
 
@@ -87,7 +87,7 @@ export class GamesController {
     if (!user) {
       throw new AuthenticationError(
         'You are not authenticated to perform this action',
-        'UNAUTHENTICATED'
+        'UNAUTHENTICATED',
       );
     }
 
