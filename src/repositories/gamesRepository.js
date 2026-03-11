@@ -54,6 +54,12 @@ export class GamesRepository {
     return rows[0];
   }
 
+  /**
+   * Finds a game by its ID.
+   *
+   * @param {number} id - The ID of the game to find.
+   * @returns {Promise<object|null>} The game object if found, otherwise null.
+   */
   static async findGameById(id) {
     const { rows } = await getPool().query(
       `
@@ -75,6 +81,13 @@ export class GamesRepository {
     return rows[0] || null;
   }
 
+  /**
+   * Finds all games with pagination.
+   *
+   * @param {number} limit - The maximum number of games to return.
+   * @param {number} offset - The number of games to skip before starting to return results.
+   * @returns {Promise<object[]>} A list of games.
+   */
   static async findAllGames(limit, offset) {
     const { rows } = await getPool().query(
       `
@@ -97,6 +110,14 @@ export class GamesRepository {
     return rows;
   }
 
+  /**
+   * Finds games by their genre with pagination.
+   *
+   * @param {string} genre - The genre to filter games by.
+   * @param {number} limit - The maximum number of games to return.
+   * @param {number} offset - The number of games to skip before starting to return results.
+   * @returns {Promise<object[]>} A list of games matching the genre.
+   */
   static async findGamesByGenre(genre, limit, offset) {
     const { rows } = await getPool().query(
       `
@@ -120,6 +141,12 @@ export class GamesRepository {
     return rows;
   }
 
+  /**
+   * Gets the total count of games, if a genre is specified only count games of that genre.
+   *
+   * @param {string|null} genre - The genre to filter games by, or undefined to count all games.
+   * @returns {Promise<number>} The total count of games.
+   */
   static async getTotalGamesCount(genre) {
     if (genre) {
       const { rows } = await getPool().query(
@@ -138,6 +165,13 @@ export class GamesRepository {
     return Number(rows[0].count);
   }
 
+  /**
+   * Updates a game by its ID.
+   *
+   * @param {number} id - The ID of the game to update.
+   * @param {object} gameData - The updated game data.
+   * @returns {Promise<object|null>} The updated game object if successful, otherwise null.
+   */
   static async updateGame(id, gameData) {
     const { rows } = await getPool().query(
       `UPDATE games SET
@@ -176,6 +210,12 @@ export class GamesRepository {
     return rows[0] || null;
   }
 
+  /**
+   * Deletes a game by its ID.
+   *
+   * @param {number} id - The ID of the game to delete.
+   * @returns {Promise<boolean>} True if the game was deleted, otherwise false.
+   */
   static async deleteGame(id) {
     const { rowCount } = await getPool().query(
       `DELETE FROM games WHERE id = $1`,
