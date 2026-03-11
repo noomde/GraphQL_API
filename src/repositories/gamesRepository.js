@@ -97,7 +97,40 @@ export class GamesRepository {
     return rows;
   }
 
-  static async getTotalGamesCount() {
+  static async findGamesByGenre(genre, limit, offset) {
+    const { rows } = await getPool().query(
+      `
+      SELECT
+        id,
+        metacritic_id AS "metacriticId",
+        title,
+        release_date::text AS "releaseDate",
+        rating,
+        genres,
+        description,
+        developer,
+        publisher
+      FROM games
+      WHERE genres ILIKE $1
+      ORDER BY id ASC
+      LIMIT $2 OFFSET $3
+      `,
+      [`%${genre}%`, limit, offset],
+    );
+    return rows;
+  }
+
+  static async getTotalGamesCount(genre) {
+    if (genre) {
+      const { rows } = await getPool().query(
+        `SELECT COUNT(*)
+       FROM games
+       WHERE genres ILIKE $1`,
+        [`%${genre}%`],
+      );
+      return Number(rows[0].count);
+    }
+
     const { rows } = await getPool().query(`
     SELECT COUNT(*) FROM games
   `);
