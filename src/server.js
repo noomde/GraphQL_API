@@ -19,6 +19,7 @@ try {
   const app = express();
   const port = process.env.PORT || 3001;
 
+  // safety measures
   app.use(
     helmet({
       crossOriginOpenerPolicy: { policy: 'same-origin' },
@@ -31,6 +32,7 @@ try {
 
   app.set('trust proxy', 1);
 
+  // define apollo server
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
@@ -50,6 +52,7 @@ try {
     res.status(200).json({ status: 'ok' });
   });
 
+  // start the server
   await apolloServer.start();
   apolloServer.applyMiddleware({ app, path: '/graphql' });
 

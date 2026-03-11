@@ -3,6 +3,12 @@ const { Pool } = pg;
 
 let pool = null;
 
+/**
+ * Connects to the PostgreSQL database using the provided connection string.
+ *
+ * @param {string} connectionString - The connection string for the PostgreSQL database.
+ * @returns {Promise<Pool>} A promise resolving to the database pool.
+ */
 export const connectToDatabase = async (connectionString) => {
   pool = new Pool({
     connectionString,
@@ -13,18 +19,17 @@ export const connectToDatabase = async (connectionString) => {
 
   for (const signalEvent of ['SIGINT', 'SIGTERM']) {
     process.on(signalEvent, () => {
-      ;(async () => {
+      (async () => {
         try {
-          await pool.end()
+          await pool.end();
         } finally {
-          process.exit(0)
+          process.exit(0);
         }
-      })()
-    })
+      })();
+    });
   }
 
   return pool;
 };
-
 
 export const getPool = () => pool;

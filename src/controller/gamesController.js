@@ -5,9 +5,15 @@ export class GamesController {
   /**
    * Retrieves all games from the repository.
    *
+   * @param {number} limit - The maximum number of games to retrieve.
+   * @param {number} offset - The number of games to skip before starting to collect the result set.
+   * @param {string} genre - Optional genre filter to retrieve games of a specific genre.
    * @returns {Promise<Array>} An array of games.
    */
-  static async getAllGames(limit, offset) {
+  static async getAllGames(limit, offset, genre) {
+    if (genre) {
+      return await GamesRepository.findGamesByGenre(genre, limit, offset);
+    }
     return await GamesRepository.findAllGames(limit, offset);
   }
 
@@ -32,8 +38,8 @@ export class GamesController {
    *
    * @returns {Promise<number>} The total count of games.
    */
-  static async getTotalGamesCount() {
-    return await GamesRepository.getTotalGamesCount();
+  static async getTotalGamesCount(genre) {
+    return await GamesRepository.getTotalGamesCount(genre);
   }
 
   /**
@@ -48,7 +54,7 @@ export class GamesController {
     if (!user) {
       throw new AuthenticationError(
         'You are not authenticated to perform this action',
-        'UNAUTHENTICATED'
+        'UNAUTHENTICATED',
       );
     }
 
@@ -81,7 +87,7 @@ export class GamesController {
     if (!user) {
       throw new AuthenticationError(
         'You are not authenticated to perform this action',
-        'UNAUTHENTICATED'
+        'UNAUTHENTICATED',
       );
     }
 
