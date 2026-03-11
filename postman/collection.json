@@ -323,15 +323,28 @@
                   "script": {
                     "exec": [
                       "const response = pm.response.json();\r",
-                      "const games = response.data.games;\r",
+                      "const gamesList = response.data.games;\r",
+                      "\r",
                       "\r",
                       "pm.test(\"Response has no errors\", function () {\r",
                       "    pm.expect(response.errors).to.be.undefined;\r",
                       "});\r",
                       "\r",
                       "pm.test(\"Got all games successfully\", function () {\r",
-                      "    pm.expect(games.length).to.be.at.least(2000)\r",
-                      "    pm.expect(games).to.be.an(\"array\")\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.least(1)\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.most(100)\r",
+                      "    pm.expect(gamesList.items).to.be.an(\"array\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Got all metadata successfully\", function () {\r",
+                      "    pm.expect(gamesList).to.have.property(\"totalCount\")\r",
+                      "    pm.expect(gamesList).to.have.property(\"page\")\r",
+                      "    pm.expect(gamesList).to.have.property(\"limit\")\r",
+                      "    pm.expect(gamesList).to.have.property(\"totalPages\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Pagination limit is respected\", function () {\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.most(gamesList.limit)\r",
                       "})"
                     ],
                     "type": "text/javascript",
@@ -345,7 +358,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"query\": \"query { games { id metacriticId title releaseDate rating genres description developer publisher } }\"\r\n}",
+                  "raw": "{\r\n  \"query\": \"query { games(page: 3, limit: 999) { items { id metacriticId title releaseDate rating genres description developer publisher } totalCount page limit totalPages } }\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -708,7 +721,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"query\": \"query { games { id metacriticId title DarrowDate rating genres description developer publisher } }\"\r\n}",
+                  "raw": "{\r\n  \"query\": \"query { games { items { id metacriticId title DarrowDate rating genres description developer publisher } } }\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"

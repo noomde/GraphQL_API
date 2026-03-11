@@ -75,7 +75,7 @@ export class GamesRepository {
     return rows[0] || null;
   }
 
-  static async findAllGames() {
+  static async findAllGames(limit, offset) {
     const { rows } = await getPool().query(
       `
       SELECT
@@ -90,9 +90,19 @@ export class GamesRepository {
         publisher
       FROM games
       ORDER BY id ASC
+      LIMIT $1 OFFSET $2
       `,
+      [limit, offset],
     );
     return rows;
+  }
+
+  static async getTotalGamesCount() {
+    const { rows } = await getPool().query(`
+    SELECT COUNT(*) FROM games
+  `);
+
+    return Number(rows[0].count);
   }
 
   static async updateGame(id, gameData) {
@@ -134,9 +144,10 @@ export class GamesRepository {
   }
 
   static async deleteGame(id) {
-    const { rowCount } = await getPool().query(`DELETE FROM games WHERE id = $1`, [
-      id,
-    ]);
+    const { rowCount } = await getPool().query(
+      `DELETE FROM games WHERE id = $1`,
+      [id],
+    );
     return rowCount > 0;
   }
 }

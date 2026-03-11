@@ -10,8 +10,22 @@ export default {
      *
      * @returns {Promise<Array>} An array of games.
      */
-    games: async () => {
-      return await GamesController.getAllGames();
+    games: async (_, { page = 1, limit = 20 }) => {
+      const safePage = Math.max(page, 1);
+      const safeLimit = Math.min(Math.max(limit, 1), 100);
+
+      const offset = (safePage - 1) * safeLimit;
+
+      const items = await GamesController.getAllGames(safeLimit, offset);
+      const totalCount = await GamesController.getTotalGamesCount();
+
+      return {
+        items,
+        totalCount,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(totalCount / safeLimit),
+      };
     },
 
     /**

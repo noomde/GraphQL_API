@@ -7,8 +7,8 @@ export class GamesController {
    *
    * @returns {Promise<Array>} An array of games.
    */
-  static async getAllGames() {
-    return await GamesRepository.findAllGames();
+  static async getAllGames(limit, offset) {
+    return await GamesRepository.findAllGames(limit, offset);
   }
 
   /**
@@ -25,6 +25,15 @@ export class GamesController {
     }
 
     return game;
+  }
+
+  /**
+   * Retrieves the total count of games in the repository.
+   *
+   * @returns {Promise<number>} The total count of games.
+   */
+  static async getTotalGamesCount() {
+    return await GamesRepository.getTotalGamesCount();
   }
 
   /**
