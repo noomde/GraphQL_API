@@ -36,6 +36,7 @@ try {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
+    introspection: true,
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
     context: async ({ req }) => {
       try {
