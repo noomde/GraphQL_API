@@ -19,7 +19,7 @@ export default {
      * @returns {Promise<Object>} The score object.
      */
     score: async (_, { gameId }) => {
-      return await ScoresController.getScoreById(gameId);
+      return await ScoresController.getScoreByGameId(gameId);
     },
   },
 };
