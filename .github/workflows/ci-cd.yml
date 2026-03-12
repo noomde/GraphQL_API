@@ -56,4 +56,4 @@ jobs:
         run: npm ci
 
       - name: Deploy
-        run: echo "Deploy"
+        run: echo "Deploy in railway automatically if src is changed"
