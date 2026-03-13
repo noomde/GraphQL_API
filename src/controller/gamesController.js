@@ -46,18 +46,10 @@ export class GamesController {
    * Creates a new game in the repository.
    *
    * @param {Object} gameData - The data for the game to be created.
-   * @param {Object} user - The authenticated user performing the update.
    * @returns {Promise<Object>} The created game.
    * @throws {ApolloError} If the game title is missing.
    */
-  static async createGame(gameData, user) {
-    if (!user) {
-      throw new AuthenticationError(
-        'You are not authenticated to perform this action',
-        'UNAUTHENTICATED',
-      );
-    }
-
+  static async createGame(gameData) {
     if (!gameData) {
       throw new ApolloError('Game data is required', 'GAME_DATA_REQUIRED');
     }
@@ -83,14 +75,7 @@ export class GamesController {
    * @returns {Promise<Object>} The updated game.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
-  static async updateGame(id, gameData, user) {
-    if (!user) {
-      throw new AuthenticationError(
-        'You are not authenticated to perform this action',
-        'UNAUTHENTICATED',
-      );
-    }
-
+  static async updateGame(id, gameData) {
     const updatedGame = await GamesRepository.updateGame(id, {
       metacritic_id: gameData.metacriticId,
       title: gameData.title,
@@ -116,13 +101,7 @@ export class GamesController {
    * @returns {Promise<Object>} A success message if the game was deleted.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
-  static async deleteGame(id, user) {
-    if (!user) {
-      throw new AuthenticationError(
-        'You are not authenticated to perform this action',
-      );
-    }
-
+  static async deleteGame(id) {
     const status = await GamesRepository.deleteGame(id);
     if (!status) {
       throw new ApolloError(`Game with ID ${id} not found`, 'GAME_NOT_FOUND');

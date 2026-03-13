@@ -42,11 +42,10 @@ export async function authenticateJWT(req) {
  *
  * @param {Object} context - The GraphQL context object.
  */
-export async function ensureAuthenticated(context) {
+export function ensureAuthenticated(context) {
   if (!context.user) {
     throw new AuthenticationError(
       'You are not authenticated to perform this action',
-      'UNAUTHENTICATED',
     );
   }
 }
