@@ -30,7 +30,7 @@ export class ScoresController {
   static async getScoreByGameId(id) {
     const score = await ScoresRepository.findScoreByGameId(id);
     if (!score) {
-      throw new ApolloError(`Score with Game ID ${id} not found`);
+      throw new ApolloError(`Score with Game ID ${id} not found`, 'SCORE_NOT_FOUND');
     }
 
     return score;
