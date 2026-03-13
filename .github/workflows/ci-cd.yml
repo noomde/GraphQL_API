@@ -13,12 +13,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 20
+          cache: npm
 
       - name: Install
         run: npm ci
@@ -26,8 +27,6 @@ jobs:
       - name: Create .env for CI
         run: |
            echo "CSV_PATH=../data/metacritic_games_test_data.csv" >> .env
-           echo "JWT_PRIVATE_KEY=${{ secrets.JWT_PRIVATE_KEY }}" >> .env
-           echo "JWT_PUBLIC_KEY=${{ secrets.JWT_PUBLIC_KEY }}" >> .env
            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
       - name: run seed scrip
@@ -45,12 +44,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 20
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
