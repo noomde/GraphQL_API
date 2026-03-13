@@ -1,7 +1,7 @@
 import { GamesController } from '../controller/gamesController.js';
 import { ScoresController } from '../controller/scoresController.js';
 import { GamePlatformsController } from '../controller/gamePlatformsController.js';
-import { ensureAuthenticated } from '../middleware/auth.js';
+import { getPagination, getPaginationMeta } from '../utils/pagination.js';
 
 export default {
   Query: {
@@ -10,21 +10,15 @@ export default {
      *
      * @returns {Promise<Array>} An array of games.
      */
-    games: async (_, { page = 1, limit = 20, genre }) => {
-      const safePage = Math.max(page, 1);
-      const safeLimit = Math.min(Math.max(limit, 1), 100);
+    games: async (_, { page, limit, genre }) => {
+      const pagination = getPagination(page, limit);
 
-      const offset = (safePage - 1) * safeLimit;
-
-      const items = await GamesController.getAllGames(safeLimit, offset, genre);
+      const items = await GamesController.getAllGames(pagination.limit, pagination.offset, genre);
       const totalCount = await GamesController.getTotalGamesCount(genre);
 
       return {
         items,
-        totalCount,
-        page: safePage,
-        limit: safeLimit,
-        totalPages: Math.ceil(totalCount / safeLimit),
+        ...getPaginationMeta(totalCount, page, limit),
       };
     },
 
@@ -49,7 +43,6 @@ export default {
      * @returns {Promise<Object>} The created game object.
      */
     createGame: async (_, args, context) => {
-      await ensureAuthenticated(context);
       return await GamesController.createGame(args, context.user);
     },
 
@@ -62,7 +55,6 @@ export default {
      * @returns {Promise<Object>} The updated game object.
      */
     updateGame: async (_, args, context) => {
-      await ensureAuthenticated(context);
       return await GamesController.updateGame(args.id, args, context.user);
     },
 
@@ -74,7 +66,6 @@ export default {
      * @returns {boolean} True if the game was successfully deleted, false otherwise.
      */
     deleteGame: async (_, { id }, context) => {
-      await ensureAuthenticated(context);
       return await GamesController.deleteGame(id, context.user);
     },
   },

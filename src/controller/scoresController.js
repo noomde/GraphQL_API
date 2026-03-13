@@ -7,8 +7,17 @@ export class ScoresController {
    *
    * @returns {Promise<Array>} An array of scores.
    */
-  static async getAllScores() {
-    return await ScoresRepository.findAllScores();
+  static async getAllScores(limit, offset) {
+    return await ScoresRepository.findAllScores(limit, offset);
+  }
+
+  /**
+   * Retrieves the total count of scores in the repository.
+   *
+   * @returns {Promise<number>} The total count of scores.
+   */
+  static async getTotalScoresCount() {
+    return await ScoresRepository.getTotalScoresCount();
   }
 
   /**

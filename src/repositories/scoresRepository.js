@@ -6,7 +6,7 @@ export class ScoresRepository {
    *
    * @returns {Promise<Array>} An array of score objects.
    */
-  static async findAllScores() {
+  static async findAllScores(limit, offset) {
     const { rows } = await getPool().query(
       `
       SELECT
@@ -18,9 +18,25 @@ export class ScoresRepository {
         userscore_sentiment AS "userScoreSentiment"
       FROM scores
       ORDER BY game_id ASC
+      LIMIT $1 OFFSET $2
       `,
+      [limit, offset],
     );
     return rows;
+  }
+
+  /**
+   * Retrieves the total count of scores in the database.
+   *
+   * @returns {Promise<number>} The total count of scores.
+   */
+  static async getTotalScoresCount() {
+    const { rows } = await getPool().query(
+      `
+      SELECT COUNT(*) FROM scores
+      `,
+    );
+    return parseInt(rows[0].count);
   }
 
   /**
