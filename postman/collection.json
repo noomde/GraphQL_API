@@ -1137,16 +1137,27 @@
                   "script": {
                     "exec": [
                       "const response = pm.response.json();\r",
-                      "const scores = response.data.scores;\r",
+                      "const scoresList = response.data.scores;\r",
                       "\r",
                       "pm.test(\"Response has no errors\", function () {\r",
                       "    pm.expect(response.errors).to.be.undefined;\r",
                       "});\r",
                       "\r",
                       "pm.test(\"Got all scores successfully\", function () {\r",
-                      "    pm.expect(scores.length).to.be.at.least(2000)\r",
-                      "    pm.expect(scores).to.be.an(\"array\")\r",
-                      "    pm.expect(scores[0]).to.have.property(\"metascore\")\r",
+                      "    pm.expect(scoresList.items.length).to.be.at.least(1)\r",
+                      "    pm.expect(scoresList.items.length).to.be.at.most(100)\r",
+                      "    pm.expect(scoresList.items).to.be.an(\"array\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Got all metadata successfully\", function () {\r",
+                      "    pm.expect(scoresList).to.have.property(\"totalCount\")\r",
+                      "    pm.expect(scoresList).to.have.property(\"page\")\r",
+                      "    pm.expect(scoresList).to.have.property(\"limit\")\r",
+                      "    pm.expect(scoresList).to.have.property(\"totalPages\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Pagination limit is respected\", function () {\r",
+                      "    pm.expect(scoresList.items.length).to.be.at.most(scoresList.limit)\r",
                       "})"
                     ],
                     "type": "text/javascript",
@@ -1166,7 +1177,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"query\": \"query { scores { metascore metascoreCount metascoreSentiment userScore userScoreCount userScoreSentiment } }\"\r\n}",
+                  "raw": "{\r\n  \"query\": \"query { scores(page: 1, limit: 999) { items { metascore metascoreCount metascoreSentiment userScore userScoreCount userScoreSentiment } totalCount page limit totalPages } }\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
