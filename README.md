@@ -17,3 +17,30 @@ You can explore both the testing service and the production service. Just add th
 
 https://studio.apollographql.com/sandbox/explorer
 
+### Testing
+
+Testerna täcker: 
+
+* användarens registrering och inloggning
+* CRUD operationer för spel
+* hämtandet av score, platforms och gamePlatforms (vilket är spel specifik platforms information)
+* kapslade/nested operationer som tillexempel score till ett specifikt spel
+* pagination, filtrerings testning
+
+#### test filer
+postman/collection.json
+postman/production.environment.json
+postman/development.environment.json
+
+#### kör testerna lokalt
+
+##### metod 1
+
+1. importera collection och production.environment till postman
+2. glöm inte välja rätt environment i postman
+3. sen kan testerna köras genom manuellt genom epecfika tester eller genom att köra hela kollektionen
+
+##### metod 2
+
+1. ladda ner collection och production.environment
+2. kör testerna i en konsol genom kommandot: npx newman run postman/collection.json -e postman/production.environment.json
