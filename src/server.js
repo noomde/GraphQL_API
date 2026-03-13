@@ -10,6 +10,7 @@ import { typeDefs } from './schema/graphQL/index.js';
 import resolvers from './resolvers/index.js';
 import { connectToDatabase } from './config/database.js';
 import { authenticateJWT } from './middleware/auth.js';
+import { limiter } from './config/rateLimiter.js';
 dotenv.config();
 
 try {
@@ -26,9 +27,31 @@ try {
       crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   );
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+        scriptSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+        styleSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+        imgSrc: [
+          "'self'",
+          'data:',
+          'https://placehold.co',
+          'https://secure.gravatar.com',
+        ],
+        fontSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+        connectSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+        frameSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        frameAncestors: ["'none'"],
+      },
+    }),
+  );
 
   app.use(cors());
   app.use(express.json());
+  app.use(limiter);
 
   app.set('trust proxy', 1);
 
@@ -38,6 +61,7 @@ try {
     resolvers,
     introspection: true,
     plugins: [ApolloServerPluginLandingPageLocalDefault()],
+    csrfPrevention: true,
     context: async ({ req }) => {
       try {
         const user = await authenticateJWT(req);

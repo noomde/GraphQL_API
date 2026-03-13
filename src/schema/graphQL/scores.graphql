@@ -7,7 +7,15 @@ type Score {
   userScoreSentiment: String
 }
 
+type scoresList {
+  items: [Score!]!
+  totalCount: Int!
+  page: Int!
+  limit: Int!
+  totalPages: Int!
+}
+
 extend type Query {
-  scores: [Score!]!
+  scores(page: Int = 1, limit: Int = 50): scoresList!
   score(gameId: Int!): Score
 }
