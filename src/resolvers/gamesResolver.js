@@ -2,6 +2,7 @@ import { GamesController } from '../controller/gamesController.js';
 import { ScoresController } from '../controller/scoresController.js';
 import { GamePlatformsController } from '../controller/gamePlatformsController.js';
 import { getPagination, getPaginationMeta } from '../utils/pagination.js';
+import { ensureAuthenticated } from '../middleware/auth.js';
 
 export default {
   Query: {
@@ -43,7 +44,8 @@ export default {
      * @returns {Promise<Object>} The created game object.
      */
     createGame: async (_, args, context) => {
-      return await GamesController.createGame(args, context.user);
+      ensureAuthenticated(context);
+      return await GamesController.createGame(args);
     },
 
     /**
@@ -55,7 +57,8 @@ export default {
      * @returns {Promise<Object>} The updated game object.
      */
     updateGame: async (_, args, context) => {
-      return await GamesController.updateGame(args.id, args, context.user);
+      ensureAuthenticated(context);
+      return await GamesController.updateGame(args.id, args);
     },
 
     /**
@@ -66,7 +69,8 @@ export default {
      * @returns {boolean} True if the game was successfully deleted, false otherwise.
      */
     deleteGame: async (_, { id }, context) => {
-      return await GamesController.deleteGame(id, context.user);
+      ensureAuthenticated(context);
+      return await GamesController.deleteGame(id);
     },
   },
 
