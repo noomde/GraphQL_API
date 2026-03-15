@@ -3,7 +3,7 @@
  *
  * @param {number} page 
  * @param {number} limit 
- * @returns 
+ * @returns {Object} An object containing the safe page, limit, and offset values.
  */
 export function getPagination (page, limit) {
     const safePage = Math.max(page, 1);
@@ -23,7 +23,7 @@ export function getPagination (page, limit) {
  * @param {number} totalCount 
  * @param {number} page 
  * @param {number} limit 
- * @returns 
+ * @returns {Object} An object containing pagination metadata.
  */
 export function getPaginationMeta (totalCount, page, limit) {
     return {
