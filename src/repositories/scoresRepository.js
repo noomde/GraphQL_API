@@ -70,8 +70,6 @@ export class ScoresRepository {
    * @returns {Promise<Array>} An array of score objects associated with the games.
    */
   static async findScoreByGameIds(gameIds) {
-    console.log("Batch query for gameIds:", gameIds);
-    
     const { rows } = await getPool().query(
       `
       SELECT
