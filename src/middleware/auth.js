@@ -1,6 +1,5 @@
 import { AuthenticationError } from 'apollo-server-errors';
 import { JsonWebToken } from '../lib/jsonWebToken.js';
-import http from 'node:http';
 
 /**
  * Authenticates a request based on a JSON Web Token (JWT).
@@ -14,28 +13,20 @@ import http from 'node:http';
  * @param {Function} next - Express next middleware function.
  */
 export async function authenticateJWT(req) {
-  try {
     const authorization = req.headers.authorization;
 
     if (!authorization) {
-      throw new Error('Missing authorization header');
+      return null;
     }
 
     const [authenticationScheme, token] = authorization.split(' ');
 
     if (authenticationScheme !== 'Bearer') {
-      throw new Error('Invalid authentication scheme.');
+      throw new AuthenticationError('Invalid authentication scheme.');
     }
 
     return await JsonWebToken.decodeUser(token);
-  } catch (error) {
-    const statusCode = 401;
-    const err = new Error(http.STATUS_CODES[statusCode]);
-    err.status = statusCode;
-    err.cause = error;
-    throw err;
   }
-}
 
 /**
  * Ensures that the user is authenticated before allowing access to a resolver.
@@ -45,7 +36,7 @@ export async function authenticateJWT(req) {
 export function ensureAuthenticated(context) {
   if (!context.user) {
     throw new AuthenticationError(
-      'You are not authenticated to perform this action',
+      'You are not authorized to perform this action',
     );
   }
 }

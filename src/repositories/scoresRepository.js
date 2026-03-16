@@ -62,4 +62,29 @@ export class ScoresRepository {
     );
     return rows[0] || null;
   }
+
+  /**
+   * Finds scores by multiple game IDs (for dataloader).
+   *
+   * @param {number[]} gameIds - An array of game IDs for which to find scores.
+   * @returns {Promise<Array>} An array of score objects associated with the games.
+   */
+  static async findScoreByGameIds(gameIds) {
+    const { rows } = await getPool().query(
+      `
+      SELECT
+        game_id AS "gameId",
+        metascore,
+        metascore_count AS "metascoreCount",
+        metascore_sentiment AS "metascoreSentiment",
+        userscore AS "userScore",
+        userscore_count AS "userScoreCount",
+        userscore_sentiment AS "userScoreSentiment"
+      FROM scores
+      WHERE game_id = ANY($1)
+      `,
+      [gameIds],
+    );
+    return rows;
+  }
 }

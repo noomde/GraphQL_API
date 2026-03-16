@@ -12,6 +12,7 @@ export class GamePlatformsController {
     const gamePlatform =
       await GamePlatformsRepository.findGamePlatformsByGameId(gameId);
 
+    // Check if any platforms were found for the given game ID (length for array check)
     if (!gamePlatform || gamePlatform.length === 0) {
       throw new ApolloError(
         `No platforms found for game with ID ${gameId}`,
