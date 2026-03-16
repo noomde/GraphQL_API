@@ -6,10 +6,10 @@ AI-Statement
 2. Fick hjälp med etl som jag gjorde om till elt
 
 
-### production service:
+### produktion service:
 https://reliable-hope-production-e0b4.up.railway.app/graphql
 
-### testing service:
+### testning service:
 https://graphqlapi-development.up.railway.app/graphql
 
 ### Deployed playground on:
@@ -17,7 +17,28 @@ You can explore both the testing service and the production service. Just add th
 
 https://studio.apollographql.com/sandbox/explorer
 
-### Testing
+### Nedladdning
+
+#### metod 1
+
+1. git clone "github url för detta projekt"
+2. Kör kommandot npm install
+3. sätt upp dina egna .env men följ .env.example för att det ska funka så bra som möjligt
+
+#### metod 2
+
+1. ladda ner som zip
+2. packa upp zip med verktyg som 7zip eller liknande
+3. Kör kommandot npm install
+4. sätt upp dina egna .env men följ .env.example för att det ska funka så bra som möjligt
+
+### Seed guide
+
+1. Följ först stegen för nedladdning
+2. kör kommandot npm run etl
+3. VIKTIGT för att det ska funka krävs det att du har gjort tables i en postgres databas. Det går att göra väldigt smidigt genom att följa dessa kommando /src/schema/db/Create.sql. I denna fil finns exakt de kommando jag skrev för att göra alla mina tables.
+
+### Testning
 
 Testerna täcker: 
 
