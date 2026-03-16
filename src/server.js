@@ -11,6 +11,7 @@ import resolvers from './resolvers/index.js';
 import { connectToDatabase } from './config/database.js';
 import { authenticateJWT } from './middleware/auth.js';
 import { limiter } from './config/rateLimiter.js';
+import { createGamePlatformsLoader } from './loaders/gamePlatformsLoader.js';
 dotenv.config();
 
 try {
@@ -65,7 +66,12 @@ try {
     context: async ({ req }) => {
       try {
         const user = await authenticateJWT(req);
-        return { user };
+        return { 
+          user,
+          loaders: {
+            gamePlatformsLoader: createGamePlatformsLoader()
+          }
+        };
       } catch {
         return { user: null };
       }

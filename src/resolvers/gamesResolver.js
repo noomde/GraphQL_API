@@ -89,10 +89,12 @@ export default {
      * Retrieves platforms associated with a specific game ID.
      *
      * @param {object} parent - The parent game object.
+     * @param {*} _ - The arguments (not used in this resolver).
+     * @param {object} context - The context object containing loaders and other shared data.
      * @returns {Promise<Array>} An array of platforms associated with the game.
      */
-    platforms: async (parent) => {
-      return await GamePlatformsController.getPlatformsByGameId(parent.id);
+    platforms: async (parent, _, context) => {
+      return await context.loaders.gamePlatformsLoader.load(parent.id);
     },
   },
 };
