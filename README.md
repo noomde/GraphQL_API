@@ -13,7 +13,7 @@ https://reliable-hope-production-e0b4.up.railway.app/graphql
 https://graphqlapi-development.up.railway.app/graphql
 
 ### Deployed playground on:
-You can explore both the testing service and the production service. Just add the correct url.
+För att testa runt i prododuktions servicen så använder du den url i vänsta hörnet och för att testa på ett lite mindre dataset kan du testa runt med testning service url.
 
 https://studio.apollographql.com/sandbox/explorer
 
