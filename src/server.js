@@ -87,12 +87,13 @@ try {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
+    introspection: true,
     plugins: [
       process.env.NODE_ENV === 'production'
         ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
         : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
     ],
-    csrfPrevention: false,
+    csrfPrevention: true,
     context: async ({ req }) => {
       const loaders = {
         gamePlatformsLoader: createGamePlatformsLoader(),
