@@ -1,6 +1,8 @@
 import { ApolloServer } from 'apollo-server-express';
-import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from 'apollo-server-core';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -27,26 +29,51 @@ try {
     helmet({
       crossOriginOpenerPolicy: { policy: 'same-origin' },
       crossOriginResourcePolicy: { policy: 'cross-origin' },
-    }),
-  );
-  app.use(
-    helmet.contentSecurityPolicy({
-      directives: {
-        defaultSrc: ["'self'", 'https://cdn.jsdelivr.net'],
-        scriptSrc: ["'self'", 'https://cdn.jsdelivr.net'],
-        styleSrc: ["'self'", 'https://cdn.jsdelivr.net'],
-        imgSrc: [
-          "'self'",
-          'data:',
-          'https://placehold.co',
-          'https://secure.gravatar.com',
-        ],
-        fontSrc: ["'self'", 'https://cdn.jsdelivr.net'],
-        connectSrc: ["'self'", 'https://cdn.jsdelivr.net'],
-        frameSrc: ["'self'"],
-        objectSrc: ["'none'"],
-        baseUri: ["'self'"],
-        frameAncestors: ["'none'"],
+
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+
+          scriptSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            'https://cdn.jsdelivr.net',
+            'https://apollo-server-landing-page.cdn.apollographql.com',
+            'https://embeddable-sandbox.cdn.apollographql.com',
+          ],
+
+          styleSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            'https://cdn.jsdelivr.net',
+            'https://fonts.googleapis.com',
+            'https://apollo-server-landing-page.cdn.apollographql.com',
+          ],
+
+          fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
+
+          imgSrc: [
+            "'self'",
+            'data:',
+            'https://placehold.co',
+            'https://secure.gravatar.com',
+            'https://apollo-server-landing-page.cdn.apollographql.com',
+          ],
+
+          connectSrc: [
+            "'self'",
+            'https://cdn.jsdelivr.net',
+            'https://apollo-server-landing-page.cdn.apollographql.com',
+            'https://embeddable-sandbox.cdn.apollographql.com',
+            'https://graphql.api.apollographql.com',
+          ],
+
+          frameSrc: ["'self'", 'https://studio.apollographql.com'],
+
+          objectSrc: ["'none'"],
+          baseUri: ["'self'"],
+          frameAncestors: ["'none'"],
+        },
       },
     }),
   );
@@ -54,33 +81,34 @@ try {
   app.use(cors());
   app.use(express.json());
   app.use(limiter);
-
   app.set('trust proxy', 1);
 
   // define apollo server
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
-    introspection: true,
-    plugins: [ApolloServerPluginLandingPageLocalDefault()],
-    csrfPrevention: true,
+    plugins: [
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+        : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+    ],
+    csrfPrevention: false,
     context: async ({ req }) => {
+      const loaders = {
+        gamePlatformsLoader: createGamePlatformsLoader(),
+        scoresLoader: createScoresLoader(),
+      };
+
       try {
         const user = await authenticateJWT(req);
-        return {
-          user,
-          loaders: {
-            gamePlatformsLoader: createGamePlatformsLoader(),
-            scoresLoader: createScoresLoader(),
-          },
-        };
+        return { user, loaders };
       } catch {
-        return { user: null };
+        return { user: null, loaders };
       }
     },
   });
 
-  // For running test cases with start-server-and-test
+  // For health check (seeing if the server is running)
   app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok' });
   });
