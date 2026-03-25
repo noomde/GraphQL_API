@@ -1,5 +1,6 @@
 import { GamesRepository } from '../repositories/gamesRepository.js';
-import { ApolloError, AuthenticationError } from 'apollo-server-errors';
+import { ApolloError } from 'apollo-server-errors';
+import { sanitize } from '../utils/sanitize.js';
 
 export class GamesController {
   /**
@@ -54,15 +55,17 @@ export class GamesController {
       throw new ApolloError('Game data is required', 'GAME_DATA_REQUIRED');
     }
 
+    const sanitizedGameData = sanitize(gameData)
+
     return await GamesRepository.insertGame({
-      metacritic_id: gameData.metacriticId,
-      title: gameData.title,
-      release_date: gameData.releaseDate,
-      rating: gameData.rating,
-      genres: gameData.genres,
-      description: gameData.description,
-      developer: gameData.developer,
-      publisher: gameData.publisher,
+      metacritic_id: sanitizedGameData.metacriticId,
+      title: sanitizedGameData.title,
+      release_date: sanitizedGameData.releaseDate,
+      rating: sanitizedGameData.rating,
+      genres: sanitizedGameData.genres,
+      description: sanitizedGameData.description,
+      developer: sanitizedGameData.developer,
+      publisher: sanitizedGameData.publisher,
     });
   }
 
@@ -76,16 +79,19 @@ export class GamesController {
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
   static async updateGame(id, gameData) {
+    const sanitizedGameData = sanitize(gameData)
+
     const updatedGame = await GamesRepository.updateGame(id, {
-      metacritic_id: gameData.metacriticId,
-      title: gameData.title,
-      release_date: gameData.releaseDate,
-      rating: gameData.rating,
-      genres: gameData.genres,
-      description: gameData.description,
-      developer: gameData.developer,
-      publisher: gameData.publisher,
+      metacritic_id: sanitizedGameData.metacriticId,
+      title: sanitizedGameData.title,
+      release_date: sanitizedGameData.releaseDate,
+      rating: sanitizedGameData.rating,
+      genres: sanitizedGameData.genres,
+      description: sanitizedGameData.description,
+      developer: sanitizedGameData.developer,
+      publisher: sanitizedGameData.publisher,
     });
+
     if (!updatedGame) {
       throw new ApolloError(`Game with ID ${id} not found`, 'GAME_NOT_FOUND');
     }
