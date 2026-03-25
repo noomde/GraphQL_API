@@ -1,7 +1,9 @@
 import { UsersRepository } from '../repositories/usersRepository.js';
 import { ApolloError } from 'apollo-server-errors';
-import bcrypt from 'bcryptjs';
 import { JsonWebToken } from '../lib/jsonWebToken.js';
+import { hashAndSaltPassword } from '../lib/hashAndSalt.js';
+import { checkUsernameRegex } from '../utils/sanitize.js';
+import bcrypt from 'bcryptjs';
 
 export class UsersController {
   /**
@@ -12,13 +14,15 @@ export class UsersController {
    * @returns {Promise<Object>} The newly created user object.
    */
   static async registerUser(username, password) {
+    checkUsernameRegex(username)
+
     const existingUser = await UsersRepository.findUserByUsername(username);
     if (existingUser) {
       throw new ApolloError('User already exists', 'USER_ALREADY_EXISTS');
     }
 
     // salt and hash the password before storing it in the database
-    const passwordHash = await this.hashAndSaltPassword(password);
+    const passwordHash = await hashAndSaltPassword(password);
 
     return await UsersRepository.insert(username, passwordHash);
   }
@@ -44,16 +48,5 @@ export class UsersController {
     const token = await JsonWebToken.encodeUser(user, '1h');
 
     return { token };
-  }
-
-  /**
-   * Hashes and salts a password using bcrypt.
-   *
-   * @param {string} password - The password to be hashed and salted.
-   * @returns {Promise<string>} The hashed and salted password.
-   */
-  static async hashAndSaltPassword(password) {
-    const saltRounds = 10;
-    return await bcrypt.hash(password, saltRounds);
   }
 }
