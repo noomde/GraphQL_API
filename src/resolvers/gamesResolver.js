@@ -1,6 +1,4 @@
 import { GamesController } from '../controller/gamesController.js';
-import { ScoresController } from '../controller/scoresController.js';
-import { GamePlatformsController } from '../controller/gamePlatformsController.js';
 import { getPagination, getPaginationMeta } from '../utils/pagination.js';
 import { ensureAuthenticated } from '../middleware/auth.js';
 
