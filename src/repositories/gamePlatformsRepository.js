@@ -7,7 +7,7 @@ export class GamePlatformsRepository {
    * @param {number} gameId - The ID of the game for which to find platforms.
    * @returns {Promise<Array>} An array of platform objects associated with the game.
    */
-  static async findGamePlatformsByGameId(gameId) {
+  async findGamePlatformsByGameId(gameId) {
     const { rows } = await getPool().query(
       `SELECT 
             platforms.id, 
@@ -27,7 +27,7 @@ export class GamePlatformsRepository {
    * @param {number[]} gameIds - An array of game IDs for which to find platforms.
    * @returns {Promise<Array>} An array of platform objects associated with the games.
    */
-  static async findGamePlatformsByGameIds(gameIds) {
+  async findGamePlatformsByGameIds(gameIds) {
     const { rows } = await getPool().query(
       `SELECT
             game_platforms.game_id AS "gameId",

@@ -2,7 +2,12 @@ import { GamesRepository } from '../repositories/gamesRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 import { sanitize } from '../utils/sanitize.js';
 
-export class GamesController {
+export default class GamesController {
+  #gamesRepository;
+
+  constructor(gamesRepository = new GamesRepository()) {
+    this.#gamesRepository = gamesRepository;
+  }
   /**
    * Retrieves all games from the repository.
    *
@@ -11,11 +16,11 @@ export class GamesController {
    * @param {string} genre - Optional genre filter to retrieve games of a specific genre.
    * @returns {Promise<Array>} An array of games.
    */
-  static async getAllGames(limit, offset, genre) {
+  async getAllGames(limit, offset, genre) {
     if (genre) {
-      return await GamesRepository.findGamesByGenre(genre, limit, offset);
+      return await this.#gamesRepository.findGamesByGenre(genre, limit, offset);
     }
-    return await GamesRepository.findAllGames(limit, offset);
+    return await this.#gamesRepository.findAllGames(limit, offset);
   }
 
   /**
@@ -25,8 +30,8 @@ export class GamesController {
    * @returns {Promise<Object>} The game.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
-  static async getGameById(id) {
-    const game = await GamesRepository.findGameById(id);
+  async getGameById(id) {
+    const game = await this.#gamesRepository.findGameById(id);
     if (!game) {
       throw new ApolloError(`Game with ID ${id} not found`, 'GAME_NOT_FOUND');
     }
@@ -39,8 +44,8 @@ export class GamesController {
    *
    * @returns {Promise<number>} The total count of games.
    */
-  static async getTotalGamesCount(genre) {
-    return await GamesRepository.getTotalGamesCount(genre);
+  async getTotalGamesCount(genre) {
+    return await this.#gamesRepository.getTotalGamesCount(genre);
   }
 
   /**
@@ -50,14 +55,14 @@ export class GamesController {
    * @returns {Promise<Object>} The created game.
    * @throws {ApolloError} If the game title is missing.
    */
-  static async createGame(gameData) {
+  async createGame(gameData) {
     if (!gameData) {
       throw new ApolloError('Game data is required', 'GAME_DATA_REQUIRED');
     }
 
-    const sanitizedGameData = sanitize(gameData)
+    const sanitizedGameData = sanitize(gameData);
 
-    return await GamesRepository.insertGame({
+    return await this.#gamesRepository.insertGame({
       metacritic_id: sanitizedGameData.metacriticId,
       title: sanitizedGameData.title,
       release_date: sanitizedGameData.releaseDate,
@@ -78,10 +83,10 @@ export class GamesController {
    * @returns {Promise<Object>} The updated game.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
-  static async updateGame(id, gameData) {
-    const sanitizedGameData = sanitize(gameData)
+  async updateGame(id, gameData) {
+    const sanitizedGameData = sanitize(gameData);
 
-    const updatedGame = await GamesRepository.updateGame(id, {
+    const updatedGame = await this.#gamesRepository.updateGame(id, {
       metacritic_id: sanitizedGameData.metacriticId,
       title: sanitizedGameData.title,
       release_date: sanitizedGameData.releaseDate,
@@ -107,8 +112,8 @@ export class GamesController {
    * @returns {Promise<Object>} A success message if the game was deleted.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
-  static async deleteGame(id) {
-    const status = await GamesRepository.deleteGame(id);
+  async deleteGame(id) {
+    const status = await this.#gamesRepository.deleteGame(id);
     if (!status) {
       throw new ApolloError(`Game with ID ${id} not found`, 'GAME_NOT_FOUND');
     }

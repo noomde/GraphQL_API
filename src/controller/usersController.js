@@ -5,7 +5,12 @@ import { hashAndSaltPassword } from '../lib/hashAndSalt.js';
 import { checkUsernameRegex } from '../utils/sanitize.js';
 import bcrypt from 'bcryptjs';
 
-export class UsersController {
+export default class UsersController {
+  #usersRepository;
+
+  constructor(usersRepository = new UsersRepository()) {
+    this.#usersRepository = usersRepository;
+  }
   /**
    * Registers a new user in the repository.
    *
@@ -13,10 +18,11 @@ export class UsersController {
    * @param {string} password - The password of the user to be registered.
    * @returns {Promise<Object>} The newly created user object.
    */
-  static async registerUser(username, password) {
-    checkUsernameRegex(username)
+  async registerUser(username, password) {
+    checkUsernameRegex(username);
 
-    const existingUser = await UsersRepository.findUserByUsername(username);
+    const existingUser =
+      await this.#usersRepository.findUserByUsername(username);
     if (existingUser) {
       throw new ApolloError('User already exists', 'USER_ALREADY_EXISTS');
     }
@@ -24,7 +30,7 @@ export class UsersController {
     // salt and hash the password before storing it in the database
     const passwordHash = await hashAndSaltPassword(password);
 
-    return await UsersRepository.insert(username, passwordHash);
+    return await this.#usersRepository.insert(username, passwordHash);
   }
 
   /**
@@ -34,8 +40,8 @@ export class UsersController {
    * @param {string} password - The password of the user to be logged in.
    * @returns {Promise<Object>} The authentication payload containing the JWT token.
    */
-  static async loginUser(username, password) {
-    const user = await UsersRepository.findUserByUsername(username);
+  async loginUser(username, password) {
+    const user = await this.#usersRepository.findUserByUsername(username);
     if (!user) {
       throw new ApolloError('Invalid credentials', 'INVALID_CREDENTIALS');
     }

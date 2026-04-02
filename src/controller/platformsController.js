@@ -1,14 +1,19 @@
 import { PlatformsRepository } from '../repositories/platformsRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 
-export class PlatformsController {
+export default class PlatformsController {
+  #platformsRepository;
+
+  constructor(platformsRepository = new PlatformsRepository()) {
+    this.#platformsRepository = platformsRepository;
+  }
   /**
    * Retrieves all platforms from the repository.
    *
    * @returns {Promise<Array>} An array of platforms.
    */
-  static async getAllPlatforms() {
-    return await PlatformsRepository.findAllPlatforms();
+  async getAllPlatforms() {
+    return await this.#platformsRepository.findAllPlatforms();
   }
 
   /**
@@ -18,8 +23,8 @@ export class PlatformsController {
    * @returns {Promise<Object>} The platform.
    * @throws {ApolloError} If the platform with the specified ID is not found.
    */
-  static async getPlatformById(id) {
-    const platform = await PlatformsRepository.findPlatformById(id);
+  async getPlatformById(id) {
+    const platform = await this.#platformsRepository.findPlatformById(id);
     if (!platform) {
       throw new ApolloError(`Platform with ID ${id} not found`);
     }

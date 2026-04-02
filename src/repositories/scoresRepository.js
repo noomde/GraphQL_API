@@ -6,7 +6,7 @@ export class ScoresRepository {
    *
    * @returns {Promise<Array>} An array of score objects.
    */
-  static async findAllScores(limit, offset) {
+  async findAllScores(limit, offset) {
     const { rows } = await getPool().query(
       `
       SELECT
@@ -30,7 +30,7 @@ export class ScoresRepository {
    *
    * @returns {Promise<number>} The total count of scores.
    */
-  static async getTotalScoresCount() {
+  async getTotalScoresCount() {
     const { rows } = await getPool().query(
       `
       SELECT COUNT(*) FROM scores
@@ -45,7 +45,7 @@ export class ScoresRepository {
    * @param {number} gameId - The ID of the game to find the score for.
    * @returns {Promise<Object>} The score object or null if not found.
    */
-  static async findScoreByGameId(gameId) {
+  async findScoreByGameId(gameId) {
     const { rows } = await getPool().query(
       `
       SELECT
@@ -69,7 +69,7 @@ export class ScoresRepository {
    * @param {number[]} gameIds - An array of game IDs for which to find scores.
    * @returns {Promise<Array>} An array of score objects associated with the games.
    */
-  static async findScoreByGameIds(gameIds) {
+  async findScoreByGameIds(gameIds) {
     const { rows } = await getPool().query(
       `
       SELECT

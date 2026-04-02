@@ -7,7 +7,7 @@ export class UsersRepository {
    * @param {string} username - The username of the user to find.
    * @returns {Promise<object|null>} The user object if found, otherwise null.
    */
-  static async findUserByUsername(username) {
+  async findUserByUsername(username) {
     const { rows } = await getPool().query(
       `SELECT id,
           username,
@@ -26,7 +26,7 @@ export class UsersRepository {
    * @param {string} passwordHash - The hashed password of the new user.
    * @returns {Promise<object>} The inserted user object.
    */
-  static async insert(username, passwordHash) {
+  async insert(username, passwordHash) {
     const { rows } = await getPool().query(
       `INSERT INTO users (username, password_hash)
          VALUES ($1, $2)

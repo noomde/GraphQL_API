@@ -1,4 +1,6 @@
-import { UsersController } from '../controller/usersController.js';
+import UsersController from '../controller/usersController.js';
+
+const usersController = new UsersController();
 
 export default {
   Mutation: {
@@ -10,7 +12,7 @@ export default {
      * @returns {Promise<Object>} The new user object.
      */
     registerUser: async (_, { username, password }) => {
-      return await UsersController.registerUser(username, password);
+      return await usersController.registerUser(username, password);
     },
 
     /**
@@ -22,7 +24,7 @@ export default {
      * @returns {Promise<Object>} The user object.
      */
     loginUser: async (_, { username, password }) => {
-      return await UsersController.loginUser(username, password);
+      return await usersController.loginUser(username, password);
     },
   },
 };
