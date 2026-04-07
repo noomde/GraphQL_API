@@ -1,6 +1,6 @@
-import { GamesRepository } from '../repositories/gamesRepository.js';
+import { GamesRepository } from '../repository/gamesRepository.js';
 import { ApolloError } from 'apollo-server-errors';
-import { sanitize } from '../utils/sanitize.js';
+import { sanitize } from '../util/sanitize.js';
 
 export default class GamesController {
   #gamesRepository;
@@ -79,7 +79,6 @@ export default class GamesController {
    *
    * @param {number} id - The ID of the game to update.
    * @param {Object} gameData - The data for the game to be updated.
-   * @param {Object} user - The authenticated user performing the update.
    * @returns {Promise<Object>} The updated game.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */
@@ -108,7 +107,6 @@ export default class GamesController {
    * Deletes a game from the repository.
    *
    * @param {number} id - The ID of the game to delete.
-   * @param {Object} user - The authenticated user performing the update.
    * @returns {Promise<Object>} A success message if the game was deleted.
    * @throws {ApolloError} If the game with the specified ID is not found.
    */

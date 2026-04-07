@@ -1,8 +1,8 @@
-import { UsersRepository } from '../repositories/usersRepository.js';
+import { UsersRepository } from '../repository/usersRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 import { JsonWebToken } from '../lib/jsonWebToken.js';
 import { hashAndSaltPassword } from '../lib/hashAndSalt.js';
-import { checkUsernameRegex } from '../utils/sanitize.js';
+import { checkUsernameRegex } from '../util/sanitize.js';
 import bcrypt from 'bcryptjs';
 
 export default class UsersController {

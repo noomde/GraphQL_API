@@ -2,15 +2,10 @@ import { AuthenticationError } from 'apollo-server-errors';
 import { JsonWebToken } from '../lib/jsonWebToken.js';
 
 /**
- * Authenticates a request based on a JSON Web Token (JWT).
- *
- * This middleware checks the authorization header of the request, verifies the authentication scheme,
- * decodes the JWT using the provided public key, and attaches the decoded user object to the `req.user` property.
- * If the authentication fails, an unauthorized response with a 401 Unauthorized status code is sent.
+ * Middleware function to authenticate a user using JWT from the Authorization header.
  *
  * @param {object} req - Express request object.
- * @param {object} res - Express response object.
- * @param {Function} next - Express next middleware function.
+ * @returns {Promise<Object|null>} The decoded user object or null if not authenticated.
  */
 export async function authenticateJWT(req) {
     const authorization = req.headers.authorization;
