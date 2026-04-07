@@ -10,10 +10,10 @@ import helmet from 'helmet';
 
 import { connectToDatabase } from './config/database.js';
 import { limiter } from './config/rateLimiter.js';
-import { createGamePlatformsLoader } from './loaders/gamePlatformsLoader.js';
-import { createScoresLoader } from './loaders/scoresLoader.js';
+import { createGamePlatformsLoader } from './loader/gamePlatformsLoader.js';
+import { createScoresLoader } from './loader/scoresLoader.js';
 import { authenticateJWT } from './middleware/auth.js';
-import resolvers from './resolvers/index.js';
+import resolvers from './resolver/index.js';
 import { typeDefs } from './schema/graphQL/index.js';
 
 dotenv.config();

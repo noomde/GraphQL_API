@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-server-errors';
 
-import { PlatformsRepository } from '../repositories/platformsRepository.js';
+import { PlatformsRepository } from '../repository/platformsRepository.js';
 
 /**
  * Responsible for handling business logic for platforms.

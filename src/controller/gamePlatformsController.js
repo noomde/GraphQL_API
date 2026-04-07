@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-server-errors';
 
-import { GamePlatformsRepository } from '../repositories/gamePlatformsRepository.js';
+import { GamePlatformsRepository } from '../repository/gamePlatformsRepository.js';
 
 /**
  * Responsible for handling business logic for game platforms.

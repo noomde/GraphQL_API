@@ -1,5 +1,5 @@
 import ScoresController from '../controller/scoresController.js';
-import { getPagination, getPaginationMeta } from '../utils/pagination.js';
+import { getPagination, getPaginationMeta } from '../util/pagination.js';
 
 const scoresController = new ScoresController();
 

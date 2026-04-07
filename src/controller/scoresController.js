@@ -1,6 +1,6 @@
 import { ApolloError } from 'apollo-server-errors';
 
-import { ScoresRepository } from '../repositories/scoresRepository.js';
+import { ScoresRepository } from '../repository/scoresRepository.js';
 
 /**
  * Responisble for handling business logic for scores.
