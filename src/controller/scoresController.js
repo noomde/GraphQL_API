@@ -1,9 +1,18 @@
-import { ScoresRepository } from '../repositories/scoresRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 
+import { ScoresRepository } from '../repositories/scoresRepository.js';
+
+/**
+ * Responisble for handling business logic for scores.
+ */
 export default class ScoresController {
   #scoresRepository;
 
+  /**
+   * Creates an instance of ScoresController.
+   *
+   * @param {ScoresRepository} scoresRepository - The repository for handling score data interactions.
+   */
   constructor(scoresRepository = new ScoresRepository()) {
     this.#scoresRepository = scoresRepository;
   }

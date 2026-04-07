@@ -1,10 +1,19 @@
-import { GamesRepository } from '../repository/gamesRepository.js';
 import { ApolloError } from 'apollo-server-errors';
+
+import { GamesRepository } from '../repository/gamesRepository.js';
 import { sanitize } from '../util/sanitize.js';
 
+/**
+ * Responsible for handling business logic for games
+ */
 export default class GamesController {
   #gamesRepository;
 
+  /**
+   * Creates an instance of gamesController.
+   *
+   * @param {GamesRepository} gamesRepository - The repository for handling game data interactions. 
+   */
   constructor(gamesRepository = new GamesRepository()) {
     this.#gamesRepository = gamesRepository;
   }

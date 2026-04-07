@@ -1,9 +1,18 @@
-import { PlatformsRepository } from '../repositories/platformsRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 
+import { PlatformsRepository } from '../repositories/platformsRepository.js';
+
+/**
+ * Responsible for handling business logic for platforms.
+ */
 export default class PlatformsController {
   #platformsRepository;
 
+  /**
+   * Creates an instance of PlatformsController.
+   *
+   * @param {PlatformsRepository} platformsRepository - The repository for handling platform data interactions.
+   */
   constructor(platformsRepository = new PlatformsRepository()) {
     this.#platformsRepository = platformsRepository;
   }

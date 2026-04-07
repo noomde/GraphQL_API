@@ -1,8 +1,8 @@
-import gamesResolver from './gamesResolver.js';
 import gamePlatformResolver from './gamePlatformResolver.js';
+import gamesResolver from './gamesResolver.js';
 import platformResolver from './platformsResolver.js';
-import userResolver from './usersResolver.js';
 import scoresResolver from './scoresResolver.js';
+import userResolver from './usersResolver.js';
 
 export default {
   Query: {

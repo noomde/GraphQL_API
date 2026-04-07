@@ -1,4 +1,5 @@
 import { AuthenticationError } from 'apollo-server-errors';
+
 import { JsonWebToken } from '../lib/jsonWebToken.js';
 
 /**

@@ -1,9 +1,18 @@
-import { GamePlatformsRepository } from '../repositories/gamePlatformsRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 
+import { GamePlatformsRepository } from '../repositories/gamePlatformsRepository.js';
+
+/**
+ * Responsible for handling business logic for game platforms.
+ */
 export default class GamePlatformsController {
   #gamePlatformsRepository;
 
+  /**
+   * Creates an instance of GamePlatformsController.
+   *
+   * @param {GamePlatformsRepository} gamePlatformsRepository - The repository for interacting with game platforms data.
+   */
   constructor(gamePlatformsRepository = new GamePlatformsRepository()) {
     this.#gamePlatformsRepository = gamePlatformsRepository;
   }

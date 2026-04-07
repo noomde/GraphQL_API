@@ -1,13 +1,22 @@
-import { UsersRepository } from '../repository/usersRepository.js';
 import { ApolloError } from 'apollo-server-errors';
-import { JsonWebToken } from '../lib/jsonWebToken.js';
-import { hashAndSaltPassword } from '../lib/hashAndSalt.js';
-import { checkUsernameRegex } from '../util/sanitize.js';
 import bcrypt from 'bcryptjs';
 
+import { hashAndSaltPassword } from '../lib/hashAndSalt.js';
+import { JsonWebToken } from '../lib/jsonWebToken.js';
+import { UsersRepository } from '../repository/usersRepository.js';
+import { checkUsernameRegex } from '../util/sanitize.js';
+
+/**
+ * Responsible for handling business logic for users.
+ */
 export default class UsersController {
   #usersRepository;
 
+  /**
+   * Creates an instance of UsersController.
+   *
+   * @param {UsersRepository} usersRepository - The repository for handling user data interactions.
+   */
   constructor(usersRepository = new UsersRepository()) {
     this.#usersRepository = usersRepository;
   }

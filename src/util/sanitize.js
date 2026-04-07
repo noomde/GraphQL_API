@@ -1,5 +1,6 @@
-import xss from 'xss';
 import { ApolloError } from 'apollo-server-errors';
+import xss from 'xss';
+
 
 /**
  * Sanitizes input in the form of string, array and objects.

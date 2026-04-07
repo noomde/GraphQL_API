@@ -9,6 +9,9 @@ const SCORE_COLUMNS = `
   userscore_sentiment AS "userScoreSentiment"
 `;
 
+/**
+ * Repository for handling database interactions related to scores.
+ */
 export class ScoresRepository {
   /**
    * Retrieves all scores from the database.

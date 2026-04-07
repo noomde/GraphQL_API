@@ -1,20 +1,21 @@
-import { ApolloServer } from 'apollo-server-express';
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,
 } from 'apollo-server-core';
-import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
-import helmet from 'helmet';
 import dotenv from 'dotenv';
+import express from 'express';
+import helmet from 'helmet';
 
-import { typeDefs } from './schema/graphQL/index.js';
-import resolvers from './resolvers/index.js';
 import { connectToDatabase } from './config/database.js';
-import { authenticateJWT } from './middleware/auth.js';
 import { limiter } from './config/rateLimiter.js';
 import { createGamePlatformsLoader } from './loaders/gamePlatformsLoader.js';
 import { createScoresLoader } from './loaders/scoresLoader.js';
+import { authenticateJWT } from './middleware/auth.js';
+import resolvers from './resolvers/index.js';
+import { typeDefs } from './schema/graphQL/index.js';
+
 dotenv.config();
 
 try {

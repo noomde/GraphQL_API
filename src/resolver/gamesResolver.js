@@ -1,6 +1,6 @@
 import GamesController from '../controller/gamesController.js';
-import { getPagination, getPaginationMeta } from '../utils/pagination.js';
 import { ensureAuthenticated } from '../middleware/auth.js';
+import { getPagination, getPaginationMeta } from '../utils/pagination.js';
 
 const gamesController = new GamesController();
 

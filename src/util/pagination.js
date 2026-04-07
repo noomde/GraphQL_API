@@ -1,8 +1,8 @@
 /**
  * Calculates pagination parameters based on the provided page and limit values.
  *
- * @param {number} page 
- * @param {number} limit 
+ * @param {number} page - The current page number.
+ * @param {number} limit - The number of items to display per page.
  * @returns {Object} An object containing the safe page, limit, and offset values.
  */
 export function getPagination (page, limit) {
@@ -20,9 +20,9 @@ export function getPagination (page, limit) {
 /**
  * Returns pagination metadata.
  *
- * @param {number} totalCount 
- * @param {number} page 
- * @param {number} limit 
+ * @param {number} totalCount - The total count of items available.
+ * @param {number} page - The current page number.
+ * @param {number} limit - The number of items to display per page.
  * @returns {Object} An object containing pagination metadata.
  */
 export function getPaginationMeta (totalCount, page, limit) {

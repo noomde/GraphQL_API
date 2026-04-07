@@ -1,5 +1,8 @@
 import { getPool } from '../config/database.js';
 
+/**
+ * Repository for handling database interactions related to platforms.
+ */
 export class PlatformsRepository {
   /**
    * Retrieves all platforms from the database.

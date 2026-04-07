@@ -12,6 +12,9 @@ const GAME_COLUMNS = `
   publisher
 `;
 
+/**
+ * Repository for handling database interactions related to games.
+ */
 export class GamesRepository {
   /**
    * Inserts a new game into the database.

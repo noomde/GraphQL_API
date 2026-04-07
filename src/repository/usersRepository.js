@@ -1,5 +1,8 @@
 import { getPool } from '../config/database.js';
 
+/**
+ * Repository for handling database interactions related to users.
+ */
 export class UsersRepository {
   /**
    * Finds a user by their username.
