@@ -2,6 +2,8 @@ import { AuthenticationError } from 'apollo-server-errors';
 
 import { JsonWebToken } from '../lib/jsonWebToken.js';
 
+const AUTH_SCHEME = 'Bearer';
+
 /**
  * Middleware function to authenticate a user using JWT from the Authorization header.
  *
@@ -17,7 +19,7 @@ export async function authenticateJWT(req) {
 
   const [authenticationScheme, token] = authorization.split(' ');
 
-  if (authenticationScheme !== 'Bearer') {
+  if (authenticationScheme !== AUTH_SCHEME) {
     throw new AuthenticationError('Invalid authentication scheme.');
   }
 
