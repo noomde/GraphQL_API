@@ -1,7 +1,6 @@
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import importPlugin from 'eslint-plugin-import';
 import jsdoc from 'eslint-plugin-jsdoc';
 import globals from 'globals';
 
@@ -15,7 +14,6 @@ export default defineConfig([
     },
     plugins: {
       jsdoc,
-      import: importPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -41,29 +39,6 @@ export default defineConfig([
       'jsdoc/require-returns-description': 'warn',
       'jsdoc/check-tag-names': 'warn',
       'jsdoc/check-alignment': 'warn',
-
-      // Import order
-      'import/order': [
-        'warn',
-        {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'object',
-            'type',
-          ],
-          'newlines-between': 'always',
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
-        },
-      ],
-      'import/first': 'error',
-      'import/newline-after-import': 'warn',
-      'import/no-duplicates': 'error',
     },
   },
 
