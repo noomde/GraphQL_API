@@ -62,16 +62,9 @@ export default class GamesController {
 
     const sanitizedGameData = sanitize(gameData);
 
-    return await this.#gamesRepository.insertGame({
-      metacritic_id: sanitizedGameData.metacriticId,
-      title: sanitizedGameData.title,
-      release_date: sanitizedGameData.releaseDate,
-      rating: sanitizedGameData.rating,
-      genres: sanitizedGameData.genres,
-      description: sanitizedGameData.description,
-      developer: sanitizedGameData.developer,
-      publisher: sanitizedGameData.publisher,
-    });
+    return await this.#gamesRepository.insertGame(
+      await this.toDbRow(sanitizedGameData),
+    );
   }
 
   /**
@@ -85,16 +78,10 @@ export default class GamesController {
   async updateGame(id, gameData) {
     const sanitizedGameData = sanitize(gameData);
 
-    const updatedGame = await this.#gamesRepository.updateGame(id, {
-      metacritic_id: sanitizedGameData.metacriticId,
-      title: sanitizedGameData.title,
-      release_date: sanitizedGameData.releaseDate,
-      rating: sanitizedGameData.rating,
-      genres: sanitizedGameData.genres,
-      description: sanitizedGameData.description,
-      developer: sanitizedGameData.developer,
-      publisher: sanitizedGameData.publisher,
-    });
+    const updatedGame = await this.#gamesRepository.updateGame(
+      id,
+      this.toDbRow(sanitizedGameData),
+    );
 
     if (!updatedGame) {
       throw new ApolloError(`Game with ID ${id} not found`, 'GAME_NOT_FOUND');
@@ -119,6 +106,25 @@ export default class GamesController {
     return {
       message: `Game with ID ${id} has been deleted successfully`,
       success: true,
+    };
+  }
+
+  /**
+   * Converts game data to a database row format.
+   *
+   * @param {Object} input - The game data.
+   * @returns {Object} The database row format.
+   */
+  toDbRow(input) {
+    return {
+      metacritic_id: input.metacriticId,
+      title: input.title,
+      release_date: input.releaseDate,
+      rating: input.rating,
+      genres: input.genres,
+      description: input.description,
+      developer: input.developer,
+      publisher: input.publisher,
     };
   }
 }
