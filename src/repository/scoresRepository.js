@@ -1,5 +1,14 @@
 import { getPool } from '../config/database.js';
 
+const SCORE_COLUMNS = `
+  metascore,
+  metascore_count AS "metascoreCount",
+  metascore_sentiment AS "metascoreSentiment",
+  userscore AS "userScore",
+  userscore_count AS "userScoreCount",
+  userscore_sentiment AS "userScoreSentiment"
+`;
+
 export class ScoresRepository {
   /**
    * Retrieves all scores from the database.
@@ -9,13 +18,7 @@ export class ScoresRepository {
   async findAllScores(limit, offset) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        metascore,
-        metascore_count AS "metascoreCount",
-        metascore_sentiment AS "metascoreSentiment",
-        userscore AS "userScore",
-        userscore_count AS "userScoreCount",
-        userscore_sentiment AS "userScoreSentiment"
+      SELECT ${SCORE_COLUMNS}
       FROM scores
       ORDER BY game_id ASC
       LIMIT $1 OFFSET $2
@@ -48,13 +51,7 @@ export class ScoresRepository {
   async findScoreByGameId(gameId) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        metascore,
-        metascore_count AS "metascoreCount",
-        metascore_sentiment AS "metascoreSentiment",
-        userscore AS "userScore",
-        userscore_count AS "userScoreCount",
-        userscore_sentiment AS "userScoreSentiment"
+      SELECT ${SCORE_COLUMNS}
       FROM scores
       WHERE game_id = $1
       `,
@@ -72,14 +69,7 @@ export class ScoresRepository {
   async findScoreByGameIds(gameIds) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        game_id AS "gameId",
-        metascore,
-        metascore_count AS "metascoreCount",
-        metascore_sentiment AS "metascoreSentiment",
-        userscore AS "userScore",
-        userscore_count AS "userScoreCount",
-        userscore_sentiment AS "userScoreSentiment"
+      SELECT ${SCORE_COLUMNS}
       FROM scores
       WHERE game_id = ANY($1)
       `,

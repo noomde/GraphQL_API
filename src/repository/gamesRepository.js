@@ -1,5 +1,17 @@
 import { getPool } from '../config/database.js';
 
+const GAME_COLUMNS = `
+  id,
+  metacritic_id AS "metacriticId",
+  title,
+  release_date::text AS "releaseDate",
+  rating,
+  genres,
+  description,
+  developer,
+  publisher
+`;
+
 export class GamesRepository {
   /**
    * Inserts a new game into the database.
@@ -29,16 +41,7 @@ export class GamesRepository {
             publisher
         ) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      RETURNING ${GAME_COLUMNS}
       `,
       [
         metacritic_id,
@@ -63,16 +66,7 @@ export class GamesRepository {
   async findGameById(id) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      SELECT ${GAME_COLUMNS}
       FROM games
       WHERE id = $1
       `,
@@ -91,16 +85,7 @@ export class GamesRepository {
   async findAllGames(limit, offset) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      SELECT ${GAME_COLUMNS}
       FROM games
       ORDER BY id ASC
       LIMIT $1 OFFSET $2
@@ -121,16 +106,7 @@ export class GamesRepository {
   async findGamesByGenre(genre, limit, offset) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      SELECT ${GAME_COLUMNS}
       FROM games
       WHERE genres ILIKE $1
       ORDER BY id ASC
@@ -150,10 +126,10 @@ export class GamesRepository {
   async getTotalGamesCount(genre) {
     if (genre) {
       const { rows } = await getPool().query(
-        `SELECT COUNT(*)
-       FROM games
-       WHERE genres ILIKE $1`,
-        [`%${genre}%`],
+      `SELECT COUNT(*)
+      FROM games
+      WHERE genres ILIKE $1`,
+      [`%${genre}%`],
       );
       return Number(rows[0].count);
     }
@@ -184,16 +160,7 @@ export class GamesRepository {
         developer = COALESCE($8, developer),
         publisher = COALESCE($9, publisher)
       WHERE id = $1
-      RETURNING
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      RETURNING ${GAME_COLUMNS}
       `,
       [
         id,
