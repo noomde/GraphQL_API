@@ -1,11 +1,25 @@
-import { UsersRepository } from '../repositories/usersRepository.js';
 import { ApolloError } from 'apollo-server-errors';
-import { JsonWebToken } from '../lib/jsonWebToken.js';
-import { hashAndSaltPassword } from '../lib/hashAndSalt.js';
-import { checkUsernameRegex } from '../utils/sanitize.js';
 import bcrypt from 'bcryptjs';
 
-export class UsersController {
+import { hashAndSaltPassword } from '../lib/hashAndSalt.js';
+import { JsonWebToken } from '../lib/jsonWebToken.js';
+import { UsersRepository } from '../repository/usersRepository.js';
+import { checkUsernameRegex } from '../util/sanitize.js';
+
+/**
+ * Responsible for handling business logic for users.
+ */
+export default class UsersController {
+  #usersRepository;
+
+  /**
+   * Creates an instance of UsersController.
+   *
+   * @param {UsersRepository} usersRepository - The repository for handling user data interactions.
+   */
+  constructor(usersRepository = new UsersRepository()) {
+    this.#usersRepository = usersRepository;
+  }
   /**
    * Registers a new user in the repository.
    *
@@ -13,10 +27,11 @@ export class UsersController {
    * @param {string} password - The password of the user to be registered.
    * @returns {Promise<Object>} The newly created user object.
    */
-  static async registerUser(username, password) {
-    checkUsernameRegex(username)
+  async registerUser(username, password) {
+    checkUsernameRegex(username);
 
-    const existingUser = await UsersRepository.findUserByUsername(username);
+    const existingUser =
+      await this.#usersRepository.findUserByUsername(username);
     if (existingUser) {
       throw new ApolloError('User already exists', 'USER_ALREADY_EXISTS');
     }
@@ -24,7 +39,7 @@ export class UsersController {
     // salt and hash the password before storing it in the database
     const passwordHash = await hashAndSaltPassword(password);
 
-    return await UsersRepository.insert(username, passwordHash);
+    return await this.#usersRepository.insert(username, passwordHash);
   }
 
   /**
@@ -34,9 +49,9 @@ export class UsersController {
    * @param {string} password - The password of the user to be logged in.
    * @returns {Promise<Object>} The authentication payload containing the JWT token.
    */
-  static async loginUser(username, password) {
-    const user = await UsersRepository.findUserByUsername(username);
-    if (!user) {
+  async loginUser(username, password) {
+    const user = await this.#usersRepository.findUserByUsername(username);
+    if (!user || !user.passwordHash) {
       throw new ApolloError('Invalid credentials', 'INVALID_CREDENTIALS');
     }
 
@@ -44,6 +59,37 @@ export class UsersController {
     if (!isValid) {
       throw new ApolloError('Invalid credentials', 'INVALID_CREDENTIALS');
     }
+
+    const token = await JsonWebToken.encodeUser(user, '1h');
+
+    return { token };
+  }
+
+  /**
+   * Logs in a user using OAuth by finding or creating a user based on provider and provider Id.
+   *
+   * @param {string} provider - The OAuth provider (example github).
+   * @param {string} providerId - The unque id from the OAuth provider (example github id).
+   * @param {string} username - The username of the user to be created if not found.
+   * @returns {Promise<Object>} The authentication payload containing the JWT token.
+   */
+  async oauthLoginUser(provider, providerId, username) {
+    if (!provider || !providerId) {
+      throw new ApolloError(
+        'Provider and/or provider ID are missing',
+        'OAUTH_LOGIN_ERROR',
+      );
+    }
+
+    if (!username) {
+      throw new ApolloError('Username is required', 'OAUTH_LOGIN_ERROR');
+    }
+
+    const user = await this.#usersRepository.findOrCreateOAuthUser(
+      provider,
+      providerId,
+      username,
+    );
 
     const token = await JsonWebToken.encodeUser(user, '1h');
 

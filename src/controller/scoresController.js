@@ -1,14 +1,29 @@
-import { ScoresRepository } from '../repositories/scoresRepository.js';
 import { ApolloError } from 'apollo-server-errors';
 
-export class ScoresController {
+import { ScoresRepository } from '../repository/scoresRepository.js';
+
+/**
+ * Responisble for handling business logic for scores.
+ */
+export default class ScoresController {
+  #scoresRepository;
+
+  /**
+   * Creates an instance of ScoresController.
+   *
+   * @param {ScoresRepository} scoresRepository - The repository for handling score data interactions.
+   */
+  constructor(scoresRepository = new ScoresRepository()) {
+    this.#scoresRepository = scoresRepository;
+  }
+
   /**
    * Retrieves all scores from the repository.
    *
    * @returns {Promise<Array>} An array of scores.
    */
-  static async getAllScores(limit, offset) {
-    return await ScoresRepository.findAllScores(limit, offset);
+  async getAllScores(limit, offset) {
+    return await this.#scoresRepository.findAllScores(limit, offset);
   }
 
   /**
@@ -16,8 +31,8 @@ export class ScoresController {
    *
    * @returns {Promise<number>} The total count of scores.
    */
-  static async getTotalScoresCount() {
-    return await ScoresRepository.getTotalScoresCount();
+  async getTotalScoresCount() {
+    return await this.#scoresRepository.getTotalScoresCount();
   }
 
   /**
@@ -27,10 +42,13 @@ export class ScoresController {
    * @returns {Promise<Object>} The score.
    * @throws {ApolloError} If the score with the specified ID is not found.
    */
-  static async getScoreByGameId(id) {
-    const score = await ScoresRepository.findScoreByGameId(id);
+  async getScoreByGameId(id) {
+    const score = await this.#scoresRepository.findScoreByGameId(id);
     if (!score) {
-      throw new ApolloError(`Score with Game ID ${id} not found`, 'SCORE_NOT_FOUND');
+      throw new ApolloError(
+        `Score with Game ID ${id} not found`,
+        'SCORE_NOT_FOUND',
+      );
     }
 
     return score;

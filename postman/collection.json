@@ -73,6 +73,49 @@
               "response": []
             },
             {
+              "name": "OAuthUser",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"User logged in successfully\", function () {\r",
+                      "  pm.expect(response.data.oauthLoginUser).to.have.property(\"token\");\r",
+                      "  pm.expect(response.data.oauthLoginUser.token).to.be.a(\"string\");\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation oauthLoginUser($username: String!, $provider: String!, $providerId: String!) { oauthLoginUser(username: $username, provider: $provider, providerId: $providerId ) { token } }\",\r\n  \"variables\": {\r\n    \"username\": \"GithubUser123\",\r\n    \"provider\": \"Github\",\r\n    \"providerId\": \"1234567890\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "loginUser",
               "event": [
                 {
@@ -192,6 +235,50 @@
                 "body": {
                   "mode": "raw",
                   "raw": "{\r\n  \"query\": \"mutation RegisterUser($username: String!, $password: String!) { registerUser(username: $username, password: $password) { id username } }\",\r\n  \"variables\": {\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "OAuthUser",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Correct error message\", function () {\r",
+                      "  pm.expect(response.errors[0].message).to.eql(\"Provider and/or provider ID are missing\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Correct error code\", function () {\r",
+                      "  pm.expect(response.errors[0].extensions.code).to.eql(\"OAUTH_LOGIN_ERROR\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"mutation oauthLoginUser($username: String!, $provider: String!, $providerId: String!) { oauthLoginUser(username: $username, provider: $provider, providerId: $providerId ) { token } }\",\r\n  \"variables\": {\r\n    \"username\": \"GithubUser123\",\r\n    \"provider\": \"\",\r\n    \"providerId\": \"1234567890\"\r\n  }\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"

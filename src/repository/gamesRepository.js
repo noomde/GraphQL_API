@@ -1,5 +1,20 @@
 import { getPool } from '../config/database.js';
 
+const GAME_COLUMNS = `
+  id,
+  metacritic_id AS "metacriticId",
+  title,
+  release_date::text AS "releaseDate",
+  rating,
+  genres,
+  description,
+  developer,
+  publisher
+`;
+
+/**
+ * Repository for handling database interactions related to games.
+ */
 export class GamesRepository {
   /**
    * Inserts a new game into the database.
@@ -7,7 +22,7 @@ export class GamesRepository {
    * @param {Object} gameData - The game data to be inserted.
    * @returns {Promise<object>} The inserted game object.
    */
-  static async insertGame({
+  async insertGame({
     metacritic_id,
     title,
     release_date,
@@ -29,16 +44,7 @@ export class GamesRepository {
             publisher
         ) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      RETURNING ${GAME_COLUMNS}
       `,
       [
         metacritic_id,
@@ -60,19 +66,10 @@ export class GamesRepository {
    * @param {number} id - The ID of the game to find.
    * @returns {Promise<object|null>} The game object if found, otherwise null.
    */
-  static async findGameById(id) {
+  async findGameById(id) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      SELECT ${GAME_COLUMNS}
       FROM games
       WHERE id = $1
       `,
@@ -88,19 +85,10 @@ export class GamesRepository {
    * @param {number} offset - The number of games to skip before starting to return results.
    * @returns {Promise<object[]>} A list of games.
    */
-  static async findAllGames(limit, offset) {
+  async findAllGames(limit, offset) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      SELECT ${GAME_COLUMNS}
       FROM games
       ORDER BY id ASC
       LIMIT $1 OFFSET $2
@@ -118,19 +106,10 @@ export class GamesRepository {
    * @param {number} offset - The number of games to skip before starting to return results.
    * @returns {Promise<object[]>} A list of games matching the genre.
    */
-  static async findGamesByGenre(genre, limit, offset) {
+  async findGamesByGenre(genre, limit, offset) {
     const { rows } = await getPool().query(
       `
-      SELECT
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      SELECT ${GAME_COLUMNS}
       FROM games
       WHERE genres ILIKE $1
       ORDER BY id ASC
@@ -147,13 +126,13 @@ export class GamesRepository {
    * @param {string|null} genre - The genre to filter games by, or undefined to count all games.
    * @returns {Promise<number>} The total count of games.
    */
-  static async getTotalGamesCount(genre) {
+  async getTotalGamesCount(genre) {
     if (genre) {
       const { rows } = await getPool().query(
-        `SELECT COUNT(*)
-       FROM games
-       WHERE genres ILIKE $1`,
-        [`%${genre}%`],
+      `SELECT COUNT(*)
+      FROM games
+      WHERE genres ILIKE $1`,
+      [`%${genre}%`],
       );
       return Number(rows[0].count);
     }
@@ -172,7 +151,7 @@ export class GamesRepository {
    * @param {object} gameData - The updated game data.
    * @returns {Promise<object|null>} The updated game object if successful, otherwise null.
    */
-  static async updateGame(id, gameData) {
+  async updateGame(id, gameData) {
     const { rows } = await getPool().query(
       `UPDATE games SET
         metacritic_id = COALESCE($2, metacritic_id),
@@ -184,16 +163,7 @@ export class GamesRepository {
         developer = COALESCE($8, developer),
         publisher = COALESCE($9, publisher)
       WHERE id = $1
-      RETURNING
-        id,
-        metacritic_id AS "metacriticId",
-        title,
-        release_date::text AS "releaseDate",
-        rating,
-        genres,
-        description,
-        developer,
-        publisher
+      RETURNING ${GAME_COLUMNS}
       `,
       [
         id,
@@ -216,7 +186,7 @@ export class GamesRepository {
    * @param {number} id - The ID of the game to delete.
    * @returns {Promise<boolean>} True if the game was deleted, otherwise false.
    */
-  static async deleteGame(id) {
+  async deleteGame(id) {
     const { rowCount } = await getPool().query(
       `DELETE FROM games WHERE id = $1`,
       [id],

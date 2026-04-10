@@ -1,5 +1,7 @@
-import { ScoresController } from '../controller/scoresController.js';
-import { getPagination, getPaginationMeta } from '../utils/pagination.js';
+import ScoresController from '../controller/scoresController.js';
+import { getPagination, getPaginationMeta } from '../util/pagination.js';
+
+const scoresController = new ScoresController();
 
 export default {
   Query: {
@@ -11,9 +13,9 @@ export default {
     scores: async (_, { page, limit }) => {
       const pagination = getPagination(page, limit);
 
-      const items = await ScoresController.getAllScores(pagination.limit, pagination.offset);
+      const items = await scoresController.getAllScores(pagination.limit, pagination.offset);
 
-      const totalCount = await ScoresController.getTotalScoresCount();
+      const totalCount = await scoresController.getTotalScoresCount();
 
       return { 
         items,
@@ -29,7 +31,7 @@ export default {
      * @returns {Promise<Object>} The score object.
      */
     score: async (_, { gameId }) => {
-      return await ScoresController.getScoreByGameId(gameId);
+      return await scoresController.getScoreByGameId(gameId);
     },
   },
 };

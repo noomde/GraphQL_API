@@ -1,5 +1,7 @@
 import { createSingleLoader } from './createSingleLoader.js';
-import { ScoresRepository } from '../repositories/scoresRepository.js';
+import { ScoresRepository } from '../repository/scoresRepository.js';
+
+const scoreRepository = new ScoresRepository();
 
 /**
  * Creates a DataLoader for batching and caching database requests for scores based on game IDs.
@@ -8,6 +10,6 @@ import { ScoresRepository } from '../repositories/scoresRepository.js';
  */
 export function createScoresLoader() {
   return createSingleLoader((gameIds) =>
-    ScoresRepository.findScoreByGameIds(gameIds),
+    scoreRepository.findScoreByGameIds(gameIds),
   );
 }

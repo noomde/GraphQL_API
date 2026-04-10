@@ -2,6 +2,13 @@
  * Class responsible for running SQL transformations on the database using provided SQL files and a SQL loader.
  */
 export class SqlTransformRunner {
+
+  /**
+   * Creates an instance of the SQLTransformRunner class.
+   *
+   * @param {Object} database - The database connection object.
+   * @param {Object} sqlLoader - The SQL loader instance.
+   */
   constructor(database, sqlLoader) {
     this.database = database;
     this.sqlLoader = sqlLoader;
@@ -31,7 +38,7 @@ export class SqlTransformRunner {
   /**
    * Executes a series of database operations within a transaction. If any operation fails, the transaction is rolled back.
    *
-   * @param {Function} callback
+   * @param {Function} callback - The function containing the database operations to be executed.
    */
   async transaction(callback) {
     await this.database.query('BEGIN');

@@ -17,13 +17,16 @@
   "scripts": {
     "start": "node src/server.js",
     "test": "npx newman run postman/collection.json -e postman/production.environment.json",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
     "etl": "node ELT/pipeline.js"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.0.0",
-    "globals": "^17.3.0",
+    "eslint": "^9.36.0",
+    "@eslint/js": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsdoc": "^50.6.17",
+    "globals": "^16.0.0",
     "newman": "^6.2.2"
   },
   "dependencies": {

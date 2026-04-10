@@ -1,8 +1,17 @@
 import fs from 'fs';
 import path from 'path';
+
 import { from as copyFrom } from 'pg-copy-streams';
 
+/**
+ * The SqlLoader is responsible for loading SQL files.
+ */
 export class SqlLoader {
+  /**
+   * Creates an instance of sqlLoader.
+   *
+   * @param {string} sqlPath - The path to the directory containing SQL files.
+   */
   constructor(sqlPath) {
     this.sqlPath = sqlPath;
   }

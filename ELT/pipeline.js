@@ -1,7 +1,7 @@
-import { SqlTransformRunner } from './sqlTransformer.js';
-import { SqlLoader } from './sqlLoader.js';
-import { extractDataFromCSV } from './extractor.js';
 import { database, paths } from './config.js';
+import { extractDataFromCSV } from './extractor.js';
+import { SqlLoader } from './sqlLoader.js';
+import { SqlTransformRunner } from './sqlTransformer.js';
 
 const client = await database.connect();
 

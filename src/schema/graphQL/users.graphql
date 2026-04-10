@@ -1,6 +1,8 @@
 type User {
   id: ID!
   username: String!
+  provider: String
+  providerId: String
 }
 
 type AuthPayload {
@@ -10,4 +12,5 @@ type AuthPayload {
 extend type Mutation {
   registerUser(username: String!, password: String!): User!
   loginUser(username: String!, password: String!): AuthPayload!
+  oauthLoginUser(provider: String!, providerId: String!, username: String!): AuthPayload!
 }
