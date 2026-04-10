@@ -65,7 +65,23 @@ export default class UsersController {
     return { token };
   }
 
+  /**
+   * Logs in a user using OAuth by finding or creating a user based on provider and provider Id.
+   *
+   * @param {string} provider - The OAuth provider (example github).
+   * @param {string} providerId - The unque id from the OAuth provider (example github id).
+   * @param {string} username - The username of the user to be created if not found.
+   * @returns {Promise<Object>} The authentication payload containing the JWT token.
+   */
   async oauthLoginUser(provider, providerId, username) {
-    const user = await this.#usersRepository.
+    if (!provider || !providerId) {
+      throw new ApolloError('Provider and/or provider ID are missing', 'OAUTH_LOGIN_ERROR');
+    }
+
+    const user = await this.#usersRepository.findOrCreateOAuthUser(provider, providerId, username)
+
+    const token = await JsonWebToken.encodeUser(user, '1h');
+
+    return { token };
   }
 }
