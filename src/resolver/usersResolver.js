@@ -7,8 +7,9 @@ export default {
     /**
      * Registers a new user.
      *
-     * @param {*} _ - The parent object.
-     * @param {*} userData - The data for the user to be registered.
+     * @param {object} _ - The parent object.
+     * @param {string} username - The username.
+     * @param {string} password - The password.
      * @returns {Promise<Object>} The new user object.
      */
     registerUser: async (_, { username, password }) => {
@@ -18,13 +19,29 @@ export default {
     /**
      * Logs in a user.
      *
-     * @param {*} _ - The parent object.
-     * @param {*} username - The username.
-     * @param {*} password - The password.
+     * @param {object} _ - The parent object.
+     * @param {string} username - The username.
+     * @param {string} password - The password.
      * @returns {Promise<Object>} The user object.
      */
     loginUser: async (_, { username, password }) => {
       return await usersController.loginUser(username, password);
+    },
+
+    /**
+     * Logs in a user using OAuth.
+     * @param {object} _ - The parent object.
+     * @param {string} provider - The OAuth provider (example github).
+     * @param {string} providerId - The unque id from the OAuth provider (example github id).
+     * @param {string} username - The username.
+     * @returns {Promise<Object>} The user object.
+     */
+    oauthLoginUser: async (_, { provider, providerId, username }) => {
+      return await usersController.oauthLoginUser(
+        provider,
+        providerId,
+        username,
+      );
     },
   },
 };
