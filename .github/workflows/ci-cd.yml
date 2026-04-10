@@ -32,6 +32,9 @@ jobs:
       - name: run seed scrip
         run: npm run etl
 
+      - name: run lint
+        run: npm run lint
+
       - name: Run tests
         run: npm test
 
