@@ -51,7 +51,7 @@ export default class UsersController {
    */
   async loginUser(username, password) {
     const user = await this.#usersRepository.findUserByUsername(username);
-    if (!user) {
+    if (!user || !user.passwordHash) {
       throw new ApolloError('Invalid credentials', 'INVALID_CREDENTIALS');
     }
 
@@ -75,10 +75,21 @@ export default class UsersController {
    */
   async oauthLoginUser(provider, providerId, username) {
     if (!provider || !providerId) {
-      throw new ApolloError('Provider and/or provider ID are missing', 'OAUTH_LOGIN_ERROR');
+      throw new ApolloError(
+        'Provider and/or provider ID are missing',
+        'OAUTH_LOGIN_ERROR',
+      );
     }
 
-    const user = await this.#usersRepository.findOrCreateOAuthUser(provider, providerId, username)
+    if (!username) {
+      throw new ApolloError('Username is required', 'OAUTH_LOGIN_ERROR');
+    }
+
+    const user = await this.#usersRepository.findOrCreateOAuthUser(
+      provider,
+      providerId,
+      username,
+    );
 
     const token = await JsonWebToken.encodeUser(user, '1h');
 
