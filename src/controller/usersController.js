@@ -64,4 +64,8 @@ export default class UsersController {
 
     return { token };
   }
+
+  async oauthLoginUser(provider, providerId, username) {
+    const user = await this.#usersRepository.
+  }
 }
