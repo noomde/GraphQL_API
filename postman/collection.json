@@ -462,6 +462,246 @@
               "response": []
             },
             {
+              "name": "getGamesFiltered platform",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const gamesList = response.data.games;\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Response has no errors\", function () {\r",
+                      "    pm.expect(response.errors).to.be.undefined;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Got all games successfully\", function () {\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.least(1)\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.most(100)\r",
+                      "    pm.expect(gamesList.items).to.be.an(\"array\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Got all RPG games successfully\", function () {\r",
+                      "    gamesList.items.forEach(game => {\r",
+                      "        pm.expect(game.genres).to.include(\"RPG\");\r",
+                      "    });\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { games(page: 1, limit: 999, filter: {genre: \\\"RPG\\\"}) { items { id metacriticId title releaseDate rating genres description developer publisher } } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getGamesFiltered genre",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const gamesList = response.data.games;\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Response has no errors\", function () {\r",
+                      "    pm.expect(response.errors).to.be.undefined;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Got all games successfully\", function () {\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.least(1)\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.most(100)\r",
+                      "    pm.expect(gamesList.items).to.be.an(\"array\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Got all RPG games successfully\", function () {\r",
+                      "    gamesList.items.forEach(game => {\r",
+                      "        pm.expect(game.genres).to.include(\"RPG\");\r",
+                      "    });\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { games(page: 1, limit: 999, filter: {genre: \\\"RPG\\\"}) { items { id metacriticId title releaseDate rating genres description developer publisher } } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getGamesFiltered developer",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const gamesList = response.data.games;\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Response has no errors\", function () {\r",
+                      "    pm.expect(response.errors).to.be.undefined;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Got all games successfully\", function () {\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.least(1)\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.most(100)\r",
+                      "    pm.expect(gamesList.items).to.be.an(\"array\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Got all RPG games successfully\", function () {\r",
+                      "    gamesList.items.forEach(game => {\r",
+                      "        pm.expect(game.genres).to.include(\"RPG\");\r",
+                      "    });\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { games(page: 1, limit: 999, filter: {genre: \\\"RPG\\\"}) { items { id metacriticId title releaseDate rating genres description developer publisher } } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getGamesFiltered publisher",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const response = pm.response.json();\r",
+                      "const gamesList = response.data.games;\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Response has no errors\", function () {\r",
+                      "    pm.expect(response.errors).to.be.undefined;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Got all games successfully\", function () {\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.least(1)\r",
+                      "    pm.expect(gamesList.items.length).to.be.at.most(100)\r",
+                      "    pm.expect(gamesList.items).to.be.an(\"array\")\r",
+                      "})\r",
+                      "\r",
+                      "pm.test(\"Got all RPG games successfully\", function () {\r",
+                      "    gamesList.items.forEach(game => {\r",
+                      "        pm.expect(game.genres).to.include(\"RPG\");\r",
+                      "    });\r",
+                      "})"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{apiToken}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"query\": \"query { games(page: 1, limit: 999, filter: {genre: \\\"RPG\\\"}) { items { id metacriticId title releaseDate rating genres description developer publisher } } }\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}{{path}}",
+                  "host": [
+                    "{{base_url}}{{path}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "getGamesFiltered",
               "event": [
                 {
@@ -505,7 +745,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n  \"query\": \"query { games(page: 1, limit: 999, genre: \\\"rpg\\\") { items { id metacriticId title releaseDate rating genres description developer publisher } } }\"\r\n}",
+                  "raw": "{\r\n  \"query\": \"query { games(page: 1, limit: 999, filter: {genre: \\\"RPG\\\"}) { items { id metacriticId title releaseDate rating genres description developer publisher } } }\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"

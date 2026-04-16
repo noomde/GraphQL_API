@@ -1,0 +1,26 @@
+type PlatformAverageScore {
+  name: String!
+  averageMetascore: Float!
+  medianMetascore: Float!
+  gameCount: Int!
+}
+
+type DeveloperAverageScore {
+  name: String!
+  averageMetascore: Float!
+  medianMetascore: Float!
+  gameCount: Int!
+}
+
+type PublisherAverageScore {
+  name: String!
+  averageMetascore: Float!
+  medianMetascore: Float!
+  gameCount: Int!
+}
+
+extend type Query {
+  averageScorePerPlatform: [PlatformAverageScore!]!
+  averageScorePerDeveloper: [DeveloperAverageScore!]!
+  averageScorePerPublisher: [PublisherAverageScore!]!
+}

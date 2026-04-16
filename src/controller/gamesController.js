@@ -25,11 +25,8 @@ export default class GamesController {
    * @param {string} genre - Optional genre filter to retrieve games of a specific genre.
    * @returns {Promise<Array>} An array of games.
    */
-  async getAllGames(limit, offset, genre) {
-    if (genre) {
-      return await this.#gamesRepository.findGamesByGenre(genre, limit, offset);
-    }
-    return await this.#gamesRepository.findAllGames(limit, offset);
+  async getAllGames(limit, offset, filter = {}) {
+    return await this.#gamesRepository.findAllGames(limit, offset, filter);
   }
 
   /**
@@ -53,8 +50,8 @@ export default class GamesController {
    *
    * @returns {Promise<number>} The total count of games.
    */
-  async getTotalGamesCount(genre) {
-    return await this.#gamesRepository.getTotalGamesCount(genre);
+  async getTotalGamesCount(filter) {
+    return await this.#gamesRepository.getTotalGamesCount(filter);
   }
 
   /**
@@ -72,7 +69,7 @@ export default class GamesController {
     const sanitizedGameData = sanitize(gameData);
 
     return await this.#gamesRepository.insertGame(
-      await this.toDbRow(sanitizedGameData),
+      this.toDbRow(sanitizedGameData),
     );
   }
 

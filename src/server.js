@@ -16,6 +16,14 @@ import { authenticateJWT } from './middleware/auth.js';
 import resolvers from './resolver/index.js';
 import { typeDefs } from './schema/graphQL/index.js';
 
+import StatisticsController from './controller/statisticsController.js';
+import UsersController from './controller/usersController.js';
+import ScoresController from './controller/scoresController.js';
+import PlatformsController from './controller/platformsController.js';
+import GamesController from './controller/gamesController.js';
+import GamePlatformsController from './controller/gamePlatformsController.js';
+
+
 dotenv.config();
 
 try {
@@ -101,11 +109,20 @@ try {
         scoresLoader: createScoresLoader(),
       };
 
+      const controllers = {
+      games: new GamesController(),
+      gamePlatforms: new GamePlatformsController(),
+      platforms: new PlatformsController(),
+      scores: new ScoresController(),
+      statistics: new StatisticsController(),
+      users: new UsersController(),
+      }
+
       try {
         const user = await authenticateJWT(req);
-        return { user, loaders };
+        return { user, loaders, controllers };
       } catch {
-        return { user: null, loaders };
+        return { user: null, loaders, controllers };
       }
     },
   });

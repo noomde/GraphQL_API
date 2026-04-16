@@ -1,15 +1,16 @@
 import { getPool } from '../config/database.js';
+import { gameFilterQuery } from '../util/filterHelper.js';
 
 const GAME_COLUMNS = `
-  id,
-  metacritic_id AS "metacriticId",
-  title,
-  release_date::text AS "releaseDate",
-  rating,
-  genres,
-  description,
-  developer,
-  publisher
+  games.id,
+  games.metacritic_id AS "metacriticId",
+  games.title,
+  games.release_date::text AS "releaseDate",
+  games.rating,
+  games.genres,
+  games.description,
+  games.developer,
+  games.publisher
 `;
 
 /**
@@ -85,38 +86,27 @@ export class GamesRepository {
    * @param {number} offset - The number of games to skip before starting to return results.
    * @returns {Promise<object[]>} A list of games.
    */
-  async findAllGames(limit, offset) {
-    const { rows } = await getPool().query(
-      `
-      SELECT ${GAME_COLUMNS}
-      FROM games
-      ORDER BY id ASC
-      LIMIT $1 OFFSET $2
-      `,
-      [limit, offset],
-    );
-    return rows;
-  }
+  async findAllGames(limit, offset, filter = {}) {
+    const { joins, whereClause, values } = gameFilterQuery(filter);
 
-  /**
-   * Finds games by their genre with pagination.
-   *
-   * @param {string} genre - The genre to filter games by.
-   * @param {number} limit - The maximum number of games to return.
-   * @param {number} offset - The number of games to skip before starting to return results.
-   * @returns {Promise<object[]>} A list of games matching the genre.
-   */
-  async findGamesByGenre(genre, limit, offset) {
+    values.push(limit);
+    const limitIndex = values.length;
+
+    values.push(offset);
+    const offsetIndex = values.length;
+
     const { rows } = await getPool().query(
       `
-      SELECT ${GAME_COLUMNS}
+      SELECT DISTINCT ${GAME_COLUMNS}
       FROM games
-      WHERE genres ILIKE $1
-      ORDER BY id ASC
-      LIMIT $2 OFFSET $3
+      ${joins}
+      ${whereClause}
+      ORDER BY games.id ASC
+      LIMIT $${limitIndex} OFFSET $${offsetIndex}
       `,
-      [`%${genre}%`, limit, offset],
+      values,
     );
+
     return rows;
   }
 
@@ -126,20 +116,18 @@ export class GamesRepository {
    * @param {string|null} genre - The genre to filter games by, or undefined to count all games.
    * @returns {Promise<number>} The total count of games.
    */
-  async getTotalGamesCount(genre) {
-    if (genre) {
-      const { rows } = await getPool().query(
-      `SELECT COUNT(*)
-      FROM games
-      WHERE genres ILIKE $1`,
-      [`%${genre}%`],
-      );
-      return Number(rows[0].count);
-    }
+  async getTotalGamesCount(filter = {}) {
+    const { joins, whereClause, values } = gameFilterQuery(filter);
 
-    const { rows } = await getPool().query(`
-    SELECT COUNT(*) FROM games
-  `);
+    const { rows } = await getPool().query(
+      `
+      SELECT COUNT(DISTINCT games.id)
+      FROM games
+      ${joins}
+      ${whereClause}
+      `,
+      values,
+    );
 
     return Number(rows[0].count);
   }

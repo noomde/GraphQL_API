@@ -1,8 +1,5 @@
-import GamesController from '../controller/gamesController.js';
 import { ensureAuthenticated } from '../middleware/auth.js';
 import { getPagination, getPaginationMeta } from '../util/pagination.js';
-
-const gamesController = new GamesController();
 
 export default {
   Query: {
@@ -11,11 +8,11 @@ export default {
      *
      * @returns {Promise<Array>} An array of games.
      */
-    games: async (_, { page, limit, genre }) => {
+    games: async (_, { page, limit, filter = {} }, context) => {
       const pagination = getPagination(page, limit);
 
-      const items = await gamesController.getAllGames(pagination.limit, pagination.offset, genre);
-      const totalCount = await gamesController.getTotalGamesCount(genre);
+      const items = await context.controllers.games.getAllGames(pagination.limit, pagination.offset, filter);
+      const totalCount = await context.controllers.games.getTotalGamesCount(filter);
 
       return {
         items,
@@ -30,8 +27,8 @@ export default {
      * @param {*} id - The ID of the game to retrieve.
      * @returns {Promise<Object>} The game object.
      */
-    game: async (_, { id }) => {
-      return await gamesController.getGameById(id);
+    game: async (_, { id }, context) => {
+      return await context.controllers.games.getGameById(id);
     },
   },
 
@@ -45,7 +42,7 @@ export default {
      */
     createGame: async (_, args, context) => {
       ensureAuthenticated(context);
-      return await gamesController.createGame(args);
+      return await context.controllers.games.createGame(args);
     },
 
     /**
@@ -58,7 +55,7 @@ export default {
      */
     updateGame: async (_, args, context) => {
       ensureAuthenticated(context);
-      return await gamesController.updateGame(args.id, args);
+      return await context.controllers.games.updateGame(args.id, args);
     },
 
     /**
@@ -70,7 +67,7 @@ export default {
      */
     deleteGame: async (_, { id }, context) => {
       ensureAuthenticated(context);
-      return await gamesController.deleteGame(id);
+      return await context.controllers.games.deleteGame(id);
     },
   },
 

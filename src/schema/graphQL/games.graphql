@@ -41,12 +41,19 @@ type GameList {
   totalPages: Int!
 }
 
+input GameFilterInput {
+  genre: String
+  platform: String
+  developer: String
+  publisher: String
+}
+
 type DeleteGameResponse {
   message: String!
 }
 
 extend type Query {
-  games(page: Int = 1, limit: Int = 20, genre: String): GameList!
+  games(page: Int = 1, limit: Int = 20, filter: GameFilterInput): GameList!
   game(id: Int!): Game
 }
 
