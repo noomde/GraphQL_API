@@ -1,7 +1,3 @@
-import UsersController from '../controller/usersController.js';
-
-const usersController = new UsersController();
-
 export default {
   Mutation: {
     /**
@@ -12,8 +8,8 @@ export default {
      * @param {string} password - The password.
      * @returns {Promise<Object>} The new user object.
      */
-    registerUser: async (_, { username, password }) => {
-      return await usersController.registerUser(username, password);
+    registerUser: async (_, { username, password }, context) => {
+      return await context.controllers.users.registerUser(username, password);
     },
 
     /**
@@ -24,8 +20,8 @@ export default {
      * @param {string} password - The password.
      * @returns {Promise<Object>} The user object.
      */
-    loginUser: async (_, { username, password }) => {
-      return await usersController.loginUser(username, password);
+    loginUser: async (_, { username, password }, context) => {
+      return await context.controllers.users.loginUser(username, password);
     },
 
     /**
@@ -36,8 +32,8 @@ export default {
      * @param {string} username - The username.
      * @returns {Promise<Object>} The user object.
      */
-    oauthLoginUser: async (_, { provider, providerId, username }) => {
-      return await usersController.oauthLoginUser(
+    oauthLoginUser: async (_, { provider, providerId, username }, context) => {
+      return await context.controllers.users.oauthLoginUser(
         provider,
         providerId,
         username,

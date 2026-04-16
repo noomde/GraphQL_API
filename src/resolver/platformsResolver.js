@@ -1,7 +1,3 @@
-import PlatformsController from '../controller/platformsController.js';
-
-const platformsController = new PlatformsController();
-
 export default {
   Query: {
     /**
@@ -9,8 +5,8 @@ export default {
      *
      * @returns {Promise<Array>} An array of platforms.
      */
-    platforms: async () => {
-      return await platformsController.getAllPlatforms();
+    platforms: async (context) => {
+      return await context.controllers.platforms.getAllPlatforms();
     },
 
     /**
@@ -20,8 +16,8 @@ export default {
      * @param {*} id - The ID of the platform.
      * @returns {Promise<Object>} The platform object.
      */
-    platform: async (_, { id }) => {
-      return await platformsController.getPlatformById(id);
+    platform: async (_, { id }, context) => {
+      return await context.controllers.platforms.getPlatformById(id);
     },
   },
 };

@@ -1,7 +1,3 @@
-import { StatisticsController } from '../controller/statisticsController.js';
-
-const statisticsController = new StatisticsController();
-
 export default {
   Query: {
     /**
@@ -9,8 +5,8 @@ export default {
      *
      * @returns {Promise<Object>} - The average score of platforms object.
      */
-    averageScorePerPlatform: async () => {
-      return await statisticsController.getAverageScorePerPlatform();
+    averageScorePerPlatform: async (context) => {
+      return await context.controllers.statistics.getAverageScorePerPlatform();
     },
 
     /**
@@ -18,8 +14,8 @@ export default {
      *
      * @returns {Promise<Object>} - The average score of developers object.
      */
-    averageScorePerDeveloper: async () => {
-      return await statisticsController.getAverageScorePerDeveloper();
+    averageScorePerDeveloper: async (context) => {
+      return await context.controllers.statistics.getAverageScorePerDeveloper();
     },
 
     /**
@@ -27,8 +23,8 @@ export default {
      *
      * @returns {Promise<Object>} - The average score of publisher objeckt.
      */
-    averageScorePerPublisher: async () => {
-      return await statisticsController.getAverageScorePerPublisher();
+    averageScorePerPublisher: async (context) => {
+      return await context.controllers.statistics.getAverageScorePerPublisher();
     },
   },
 };

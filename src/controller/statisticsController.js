@@ -3,7 +3,7 @@ import { StatisticsRepository } from '../repository/statisticsRepository.js';
 /**
  * Resposible for handling business logic for statistics.
  */
-export class StatisticsController {
+export default class StatisticsController {
   #statisticsRepository;
 
   /**

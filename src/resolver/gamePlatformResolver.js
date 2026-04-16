@@ -1,7 +1,3 @@
-import GamePlatformsController from '../controller/gamePlatformsController.js';
-
-const gamePlatformController = new GamePlatformsController();
-
 export default {
   Query: {
     /**
@@ -11,8 +7,8 @@ export default {
      * @param {*} gameId - The gameId argument.
      * @returns {Promise<Array>} An array of platform objects associated with the game.
      */
-    gamePlatform: async (_, { gameId }) => {
-      return await gamePlatformController.getPlatformsByGameId(gameId);
+    gamePlatform: async (_, { gameId }, context) => {
+      return await context.controllers.gamePlatform.getPlatformsByGameId(gameId);
     },
   },
 };
