@@ -8,7 +8,7 @@ export default {
      *
      * @returns {Promise<Array>} An array of games.
      */
-    games: async (_, { page, limit, filter }, context) => {
+    games: async (_, { page, limit, filter = {} }, context) => {
       const pagination = getPagination(page, limit);
 
       const items = await context.controllers.games.getAllGames(pagination.limit, pagination.offset, filter);

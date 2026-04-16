@@ -8,7 +8,7 @@ export default {
      * @returns {Promise<Array>} An array of platform objects associated with the game.
      */
     gamePlatform: async (_, { gameId }, context) => {
-      return await context.controllers.gamePlatform.getPlatformsByGameId(gameId);
+      return await context.controllers.gamePlatforms.getPlatformsByGameId(gameId);
     },
   },
 };

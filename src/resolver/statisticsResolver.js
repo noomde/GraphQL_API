@@ -5,7 +5,7 @@ export default {
      *
      * @returns {Promise<Object>} - The average score of platforms object.
      */
-    averageScorePerPlatform: async (context) => {
+    averageScorePerPlatform: async (_, __, context) => {
       return await context.controllers.statistics.getAverageScorePerPlatform();
     },
 
@@ -14,7 +14,7 @@ export default {
      *
      * @returns {Promise<Object>} - The average score of developers object.
      */
-    averageScorePerDeveloper: async (context) => {
+    averageScorePerDeveloper: async (_, __, context) => {
       return await context.controllers.statistics.getAverageScorePerDeveloper();
     },
 
@@ -23,7 +23,7 @@ export default {
      *
      * @returns {Promise<Object>} - The average score of publisher objeckt.
      */
-    averageScorePerPublisher: async (context) => {
+    averageScorePerPublisher: async (_, __, context) => {
       return await context.controllers.statistics.getAverageScorePerPublisher();
     },
   },

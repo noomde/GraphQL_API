@@ -5,7 +5,7 @@ export default {
      *
      * @returns {Promise<Array>} An array of platforms.
      */
-    platforms: async (context) => {
+    platforms: async (_, __, context) => {
       return await context.controllers.platforms.getAllPlatforms();
     },
 

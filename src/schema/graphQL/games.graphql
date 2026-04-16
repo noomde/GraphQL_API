@@ -41,7 +41,7 @@ type GameList {
   totalPages: Int!
 }
 
-type GameFilterInput {
+input GameFilterInput {
   genre: String
   platform: String
   developer: String

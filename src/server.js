@@ -111,7 +111,7 @@ try {
 
       const controllers = {
       games: new GamesController(),
-      gamesPlatforms: new GamePlatformsController(),
+      gamePlatforms: new GamePlatformsController(),
       platforms: new PlatformsController(),
       scores: new ScoresController(),
       statistics: new StatisticsController(),
@@ -122,7 +122,7 @@ try {
         const user = await authenticateJWT(req);
         return { user, loaders, controllers };
       } catch {
-        return { user: null, loaders };
+        return { user: null, loaders, controllers };
       }
     },
   });
