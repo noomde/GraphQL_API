@@ -27,6 +27,11 @@ function STATISTICS_COLUMNS({ table, nameColumn, scoreColumn, countColumn }) {
  * Repository for handling database interactions related to statistics.
  */
 export class StatisticsRepository {
+  /**
+   * Finds all platforms and calculates the average score of each.
+   *
+   * @returns - The average score of each platform.
+   */
   async findAverageScorePerPlatform() {
     const query = `
       ${STATISTICS_COLUMNS({
@@ -45,6 +50,11 @@ export class StatisticsRepository {
     return rows;
   }
 
+  /**
+   * Finds all developers and calculates the average score of each.
+   *
+   * @returns - The average score of each developer.
+   */
   async findAverageScorePerDeveloper() {
     const query = `
       ${STATISTICS_COLUMNS({
@@ -64,7 +74,11 @@ export class StatisticsRepository {
 
     return rows;
   }
-
+  /**
+   * Finds all publishers and calculates the average score of each.
+   *
+   * @returns - The average score of each publisher.
+   */
   async findAverageScorePerPublisher() {
     const query = `
       ${STATISTICS_COLUMNS({
