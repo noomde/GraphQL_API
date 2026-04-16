@@ -115,7 +115,7 @@ try {
       platforms: new PlatformsController(),
       scores: new ScoresController(),
       statistics: new StatisticsController(),
-      auth: new UsersController(),
+      users: new UsersController(),
       }
 
       try {
