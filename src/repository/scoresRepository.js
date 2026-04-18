@@ -1,6 +1,7 @@
 import { getPool } from '../config/database.js';
 
 const SCORE_COLUMNS = `
+  game_id AS "gameId",
   metascore,
   metascore_count AS "metascoreCount",
   metascore_sentiment AS "metascoreSentiment",
