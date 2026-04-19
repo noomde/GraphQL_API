@@ -81,18 +81,21 @@ export class StatisticsRepository {
    */
   async findAverageScorePerPublisher() {
     const query = `
-      ${STATISTICS_COLUMNS({
-        table: `games JOIN scores ON scores.game_id = games.id`,
-        nameColumn: 'games.publisher',
-        scoreColumn: 'scores.metascore',
-        countColumn: 'games.id',
-      })}
+    ${STATISTICS_COLUMNS({
+      table: `games
+        JOIN scores ON scores.game_id = games.id
+        CROSS JOIN LATERAL unnest(string_to_array(games.publisher, ',')) AS publisher_name`,
+      nameColumn: 'TRIM(publisher_name)',
+      scoreColumn: 'scores.metascore',
+      countColumn: 'games.id',
+    })}
       WHERE games.publisher IS NOT NULL
         AND TRIM(games.publisher) <> ''
         AND scores.metascore IS NOT NULL
-      GROUP BY games.publisher
-      ORDER BY "averageMetascore" DESC, games.publisher ASC;
-    `;
+        AND TRIM(publisher_name) <> ''
+      GROUP BY TRIM(publisher_name)
+      ORDER BY "averageMetascore" DESC, name ASC;
+  `;
 
     const { rows } = await getPool().query(query);
 
